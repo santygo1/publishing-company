@@ -19,6 +19,8 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+    format:
+      date: dd.MM.yyyy
   # TODO: delete when deploy
   thymeleaf:
     cache: false
