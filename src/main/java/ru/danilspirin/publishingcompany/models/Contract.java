@@ -1,8 +1,6 @@
 package ru.danilspirin.publishingcompany.models;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
