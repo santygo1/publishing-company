@@ -24,6 +24,8 @@ spring:
   # TODO: delete when deploy
   thymeleaf:
     cache: false
+  jackson:
+    property-naming-strategy: SNAKE_CASE
 
 server:
   port: 8080

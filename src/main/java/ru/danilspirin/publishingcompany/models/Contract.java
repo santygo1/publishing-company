@@ -18,7 +18,6 @@ public class Contract{
     @Id
     String id;
 
-    @JsonProperty("create_date")
     @JsonFormat(pattern = "dd.MM.yyyy")
     @Column(name="create_date")
     LocalDate createDate; // Дата создания контракта
@@ -29,7 +28,7 @@ public class Contract{
     @Column(name="is_finished")
     boolean isFinished;
 
-    @JsonProperty(namespace = "finish_date", access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonFormat(pattern = "dd.MM.yyyy")
     @Column(name="finish_date")
     LocalDate finishDate;
@@ -37,7 +36,6 @@ public class Contract{
     @JsonIgnore
     @OneToOne(mappedBy = "contract")
     Writer writer;
-
     public Contract(){}
 
     @JsonCreator
