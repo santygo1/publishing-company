@@ -77,9 +77,9 @@ public class ContractService {
                     return contract;
                 })
                 // Иначе ошибка
-                .orElseThrow(() -> new EntityWithIdIsNotExistsException(
-                        updatedContractId,
-                        Contract.class)
+                .orElseThrow(() ->
+                        new EntityWithIdIsNotExistsException(
+                                updatedContractId, Contract.class)
                 );
     }
 
