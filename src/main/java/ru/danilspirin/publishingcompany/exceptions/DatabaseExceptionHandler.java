@@ -30,4 +30,11 @@ class DatabaseExceptionHandler extends ResponseEntityExceptionHandler {
     String EntityAlreadyExistsHandler(EntityAlreadyExistsException ex){
         return ex.getMessage();
     }
+
+    @ResponseBody
+    @ExceptionHandler(PassportDataNonUniqueException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    String PassportDataNonUniquehandler(PassportDataNonUniqueException ex){
+        return ex.getMessage();
+    }
 }
