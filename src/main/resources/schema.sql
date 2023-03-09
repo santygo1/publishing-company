@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS contracts(
 );
 CREATE TABLE IF NOT EXISTS writers(
     id VARCHAR PRIMARY KEY,
-    contract_id VARCHAR UNIQUE REFERENCES contracts(id) ON DELETE CASCADE ,
+    contract_id VARCHAR UNIQUE REFERENCES contracts(id) ON DELETE CASCADE ON UPDATE CASCADE,
 
     /* Паспортные данные*/
     passport_series SMALLINT NOT NULL,
