@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS writers(
     contract_id VARCHAR UNIQUE REFERENCES contracts(id) ON DELETE CASCADE ,
 
     /* Паспортные данные*/
-    password_series SMALLINT NOT NULL,
-    password_id INTEGER NOT NULL, -- номер паспорта
+    passport_series SMALLINT NOT NULL,
+    passport_id INTEGER NOT NULL, -- номер паспорта
     surname VARCHAR NOT NULL,
     "name" VARCHAR NOT NULL,
     patronymic VARCHAR NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS writers(
     address VARCHAR NULL,
     phone_number VARCHAR NULL,
 
-    UNIQUE (password_id, password_series)
+    UNIQUE (passport_id, passport_series)
 );
 CREATE TABLE IF NOT EXISTS books(
     id VARCHAR PRIMARY KEY,
