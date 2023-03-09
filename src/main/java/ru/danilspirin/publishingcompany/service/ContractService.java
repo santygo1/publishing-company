@@ -58,7 +58,7 @@ public class ContractService {
     }
 
     @Transactional
-    public Contract replace(String updatedContractId, Contract update){
+    public Contract changeContractInfo(String updatedContractId, Contract update){
         Optional<Contract> updatedContract = contractRepository.findById(updatedContractId);
         return updatedContract
                 // Обновляем данные о контракте если контракт с id существует

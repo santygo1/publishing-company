@@ -62,12 +62,12 @@ public class ContractRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> replaceContract(
+    public ResponseEntity<String> changeContractInfo(
             @PathVariable String id,
             @RequestBody Contract contract)
             throws EntityWithIdIsNotExistsException
     {
-        contractService.replace(id, contract);
+        contractService.changeContractInfo(id, contract);
         return ResponseEntity.ok().build();
     }
 
