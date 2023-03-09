@@ -82,12 +82,12 @@ public class WriterRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Writer> changeInfoAboutWriter(
+    public ResponseEntity<Writer> changeWriterInfo(
             @RequestBody Writer writer,
             @PathVariable String id)
             throws EntityWithIdIsNotExistsException
     {
-        writerService.updateWriterInfoById(id, writer);
+        writerService.changeWriterInfo(id, writer);
 
         return ResponseEntity
                 .ok()
