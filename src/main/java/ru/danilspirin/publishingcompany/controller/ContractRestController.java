@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("api/contracts")
 @Slf4j
 @RequiredArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ContractController {
+public class ContractRestController {
 
     ContractService contractService;
 
