@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.danilspirin.publishingcompany.exceptions.EntityAlreadyExistsException;
 import ru.danilspirin.publishingcompany.exceptions.EntityWithIdIsNotExistsException;
 import ru.danilspirin.publishingcompany.models.Contract;
+import ru.danilspirin.publishingcompany.models.Writer;
 import ru.danilspirin.publishingcompany.repository.ContractRepository;
+import ru.danilspirin.publishingcompany.repository.WriterRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,28 +22,44 @@ import java.util.Optional;
 @Service
 public class ContractService {
 
-    ContractRepository repository;
+    ContractRepository contractRepository;
+    WriterRepository writerRepository;
 
     @Transactional
     public Contract create(Contract contract){
-        repository.findById(contract.getId()).ifPresent(contract1 -> {
+        contractRepository.findById(contract.getId()).ifPresent(contract1 -> {
             throw new EntityAlreadyExistsException(contract.getId(), Contract.class);
         });
-        return repository.save(contract);
+        return contractRepository.save(contract);
     }
 
     public List<Contract> getAll(){
-        return repository.findAll();
+        return contractRepository.findAll();
     }
 
-    public Contract get(String id){
-        return repository.findById(id)
-                .orElseThrow(() -> new EntityWithIdIsNotExistsException(id, Contract.class));
+    public Contract get(String id)
+            throws EntityWithIdIsNotExistsException
+    {
+        return contractRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityWithIdIsNotExistsException(id, Contract.class)
+                );
+    }
+
+    public Writer getWriterByContractId(String id)
+            throws EntityWithIdIsNotExistsException
+    {
+        //TODO: вынести запрос в репозиторий
+        return contractRepository.findById(id)
+                .map(Contract::getWriter)
+                .orElseThrow(() ->
+                        new EntityWithIdIsNotExistsException(id, Contract.class)
+                );
     }
 
     @Transactional
     public Contract replace(String updatedContractId, Contract update){
-        Optional<Contract> updatedContract = repository.findById(updatedContractId);
+        Optional<Contract> updatedContract = contractRepository.findById(updatedContractId);
         return updatedContract
                 // Обновляем данные о контракте если контракт с id существует
                 .map(contract -> {
@@ -67,9 +85,12 @@ public class ContractService {
 
     @Transactional
     public void delete(String id){
-        Optional<Contract> contract = repository.findById(id);
-        if (contract.isPresent())
-            repository.delete(contract.get());
+        Optional<Contract> contract = contractRepository.findById(id);
+        if (contract.isPresent()) {
+            Contract getContract = contract.get();
+            contractRepository.delete(getContract);
+            writerRepository.delete(getContract.getWriter());
+        }
         else
             throw new EntityWithIdIsNotExistsException(id, Contract.class);
     }

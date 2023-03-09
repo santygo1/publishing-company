@@ -10,6 +10,7 @@ import ru.danilspirin.publishingcompany.exceptions.EntitiesNotFoundException;
 import ru.danilspirin.publishingcompany.exceptions.EntityAlreadyExistsException;
 import ru.danilspirin.publishingcompany.exceptions.EntityWithIdIsNotExistsException;
 import ru.danilspirin.publishingcompany.models.Contract;
+import ru.danilspirin.publishingcompany.models.Writer;
 import ru.danilspirin.publishingcompany.service.ContractService;
 
 import java.net.URI;
@@ -36,10 +37,19 @@ public class ContractController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Contract> getContractById(@PathVariable String id)
+    public ResponseEntity<Contract> getContractById(
+            @PathVariable String id)
             throws EntityWithIdIsNotExistsException
     {
         return ResponseEntity.ok(contractService.get(id));
+    }
+
+    @GetMapping("/{id}/writer")
+    public ResponseEntity<Writer> getWriterByContractId(
+            @PathVariable String id)
+        throws EntityWithIdIsNotExistsException
+    {
+        return ResponseEntity.ok(contractService.getWriterByContractId(id));
     }
 
     @PostMapping
@@ -57,9 +67,11 @@ public class ContractController {
             @RequestBody Contract contract)
             throws EntityWithIdIsNotExistsException
     {
-        Contract contract1 = contractService.replace(id, contract);
+        contractService.replace(id, contract);
         return ResponseEntity.ok().build();
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteContract(@PathVariable String id){

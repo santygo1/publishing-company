@@ -2,16 +2,15 @@ package ru.danilspirin.publishingcompany.models;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
-@JsonIgnoreProperties
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Setter @Getter @ToString @FieldDefaults(level = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 @Entity @Table(name = "contracts")
 public class Contract{
 
