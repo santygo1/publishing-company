@@ -1,3 +1,7 @@
+/* TODO:удалить когда деплой */
+DROP TABLE contracts CASCADE;
+DROP TABLE writers CASCADE;
+
 CREATE TABLE IF NOT EXISTS contracts(
     id VARCHAR PRIMARY KEY,
     create_date DATE NOT NULL, -- дата заключения контракта
