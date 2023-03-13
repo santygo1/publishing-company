@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.danilspirin.publishingcompany.exceptions.EntityAlreadyExistsException;
 import ru.danilspirin.publishingcompany.exceptions.EntityWithIdIsNotExistsException;
+import ru.danilspirin.publishingcompany.exceptions.IsbnNonUniqueException;
 import ru.danilspirin.publishingcompany.models.Book;
 import ru.danilspirin.publishingcompany.models.Writer;
 import ru.danilspirin.publishingcompany.repository.BookRepository;
@@ -32,7 +33,7 @@ public class BookService {
         return new HashSet<>(bookRepository.findAll());
     }
 
-    public Book getById(String id){
+    public Book getBook(String id){
         return bookRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Book.class)
@@ -40,8 +41,13 @@ public class BookService {
     }
 
     @Transactional
-    public Book add(Book book) {
-        return null;
+    public Book addBook(Book book) {
+        // Если добавляемая книга имеет не уникальный ISBN
+        bookRepository.findByISBN(book.getISBN())
+                //
+                .ifPresent(bookDB -> {throw new IsbnNonUniqueException();});
+
+        return bookRepository.save(book);
     }
 
     public Set<Writer> getWriters(String id) {

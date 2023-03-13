@@ -41,7 +41,7 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "writer_id"))
     Set<Writer> writers;
 
-    @OneToMany()
+    @OneToMany(mappedBy = "book")
     private List<Order> orders;
 
 }

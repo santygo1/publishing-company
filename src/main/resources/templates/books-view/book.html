@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Книга</title>
+  <link rel="stylesheet" href="/styles.css" type="text/css">
+</head>
+<body>
+<form id="book-form" th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}" hidden></form>
+<main class="content" >
+  <section class="info book__info">
+    <h2 class="info__title">Книга</h2>
+    <hr>
+
+    <div class="info__field">
+      <div class="properties">
+        <p class="hint">ID</p><p th:text="${book.getId()}"></p>
+      </div>
+    </div>
+
+    <div class="info__field">
+      <p class="title">Общая информация</p>
+      <div class="properties">
+        <p class="hint">ISBN</p><p th:text="${book.getISBN()}"/>
+        <p class="hint">Название</p><p th:text="${book.getTitle()}"/>
+        <p class="hint">Тираж</p><p th:text="${book.getCirculation()}"></p>
+        <p class="hint">Дата печати</p><p th:text="${#temporals.format(book.getIssueDate(),'dd.MM.yyyy')}"/>
+      </div>
+    </div>
+
+    <div class="info__field">
+      <p class="title">Цена</p>
+      <div class="properties">
+        <p class="hint">Себестоимость</p><p th:text="${book.getCostPrice()} + ' руб.'"></p>
+        <p class="hint">Цена продажи</p><p th:text="${book.getSellingPrice()} + ' руб.'"></p>
+        <p class="hint">Гонорар</p><p th:text="${book.getAbsoluteFee()} + ' тыс. руб.'"></p>
+      </div>
+    </div>
+
+    <div class="info__buttons">
+      <a class="button" th:href="@{/books/{id}/edit(id=${book.getId()})}">Изменить</a>
+      <input form="book-form" type="submit" value="Удалить">
+    </div>
+  </section>
+
+  <section class="info" th:with="orders=${book.getOrders()}">
+    <h2 class="info__title">Заказы</h2>
+    <hr>
+
+    <p th:if="${orders.isEmpty()}" class="empty-hint">На данную книгу нет заказов</p>
+    <table th:unless="${orders.isEmpty()}">
+      <thead>
+      <th>Заказчик</th>
+      <th>Количество экземпляров</th>
+      <th>Дата поступления</th>
+      <th>Дата завершения</th>
+      <th></th>
+      </thead>
+      <tbody>
+      <tr th:each="order : ${orders}">
+        <td><a th:text="${order.getCustomer().getId()}"></a></td>
+        <td th:text="${order.getBooksCount()}"/>
+        <td th:text="${order.getCreateDate()}"/>
+        <td th:text="${order.getFinishDate()}"/>
+        <td><a class="button" th:href="@{/orders/{id}(id=${order.getId()})}">Перейти</a></td>
+      </tr>
+      </tbody>
+    </table>
+    <a class="go-to-link" th:href="@{/orders}">Все</a>
+  </section>
+
+  <section id="writers" class="info">
+    <h2 class="info__title">Авторы</h2>
+    <a class="go-to-link" th:href="@{/writers}">Все</a>
+    <hr>
+    <form class="select-card-form" th:unless="${writers.isEmpty()}"
+          th:method="PATCH" th:action="@{/books/{id}/writers(id=${book.getId()})}">
+
+      <select name="selectedWriterId">
+        <option value="" selected>Выбрать писателя</option>
+        <option th:each="writer : ${writers}" th:value="${writer.getId()}"
+                th:text="${writer.getFullName().initials()} + ' - ' + 'Номер контракта: '+ ${writer.getContract().getContractNumber()}"/>
+      </select>
+      <input type="submit" value="Добавить"/>
+    </form>
+    <div class="card-wrapper">
+      <p th:if="${book.getWriters().isEmpty()}" class="empty-hint">С данной книгой не связано ни один писатель.</p>
+      <div th:unless="${book.getWriters().isEmpty()}"
+           th:each="writer : ${book.getWriters()}"
+           class="info__field ">
+
+        <div class="card">
+          <form th:method="DELETE"
+                id="delete-writer-form" hidden
+                th:action="@{/books/{id}/writers/{writerId}(id=${book.getId()},writerId=${writer.getId()})}">
+          </form>
+
+          <p th:text="${writer.getFullName().initials()}"/>
+          <div class="properties-table" style="display: flex; gap: 10px;">
+            <p>Контракт:</p><p th:text="${writer.getContract().getContractNumber()}"/>
+          </div>
+
+          <div class="button-container">
+            <a class="button" th:href="@{/writers/{id}(id=${writer.getId()})}">Посмотреть</a>
+            <input form="delete-writer-form" type="submit" value="Удалить">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>
