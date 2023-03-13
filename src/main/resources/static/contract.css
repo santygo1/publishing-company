@@ -1,0 +1,18 @@
+div.contract-info > *:nth-child(odd),
+div.writer-info > .id > *:nth-child(odd),
+div.writer-info  .general-info > *:nth-child(even),
+div.writer-info .passport-info > *:nth-child(even){
+    border-bottom: dotted 0.5px #d4d4d4;
+    padding-bottom: 2px;
+}
+a.writer-link{
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+div.properties-table .properties-table__title{
+    font-family: "Roboto Black", sans-serif;
+    font-weight: 700;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}

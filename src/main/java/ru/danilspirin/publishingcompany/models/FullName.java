@@ -11,4 +11,9 @@ import lombok.experimental.FieldDefaults;
 @Setter @Getter @ToString @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FullName {
     String name, surname, patronymic;
+    public String initials(){
+        return name.substring(0, 1) + '.' + ' ' +
+                patronymic.substring(0, 1) + '.' + ' ' +
+                surname;
+    }
 }

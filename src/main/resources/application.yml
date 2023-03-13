@@ -20,7 +20,7 @@ spring:
       filter:
         enabled: true
     format:
-      date: dd.MM.yyyy
+      date: yyyy-MM-dd
   # TODO: delete when deploy
   thymeleaf:
     cache: false

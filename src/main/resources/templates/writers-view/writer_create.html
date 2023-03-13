@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменение контракта</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+</head>
+<body>
+<main class="content">
+    <section class="form">
+        <a class="button-close" th:href="@{/writers}"></a>
+
+        <form class="create-form"
+              th:method="POST"
+              th:action="@{/writers}"
+              data-th-object="${writer}">
+
+            <div class="wrapper">
+                <h3 class="subfield__title">Данные о писателе</h3>
+                <div class="form__fields">
+                    <label for="surname">Фамилия:</label>
+                    <input id="surname" type="text" th:field="*{fullName.surname}"/>
+
+                    <label for="name">Имя:</label>
+                    <input id="name" type="text" th:field="*{fullName.name}"/>
+
+                    <label for="patronymic">Отчество:</label>
+                    <input id="patronymic" type="text" th:field="*{fullName.patronymic}"/>
+
+                    <label for="address">Адрес:</label>
+                    <input id="address" type="text" th:field="*{address}"/>
+
+                    <label for="phoneNumber">Номер телефона:</label>
+                    <input id="phoneNumber" type="text" th:field="*{phoneNumber}"/>
+
+                    <label for="passportSeries">Серия паспорта:</label>
+                    <input id="passportSeries" type="text" maxlength="4" th:field="*{passportSeries}"/>
+
+                    <label for="passportId">Номер паспорта:</label>
+                    <input id="passportId" type="text" maxlength="6" th:field="*{passportId}"/>
+                </div>
+            </div>
+
+            <div class="wrapper">
+                <h3 class="subfield__title">Данные контракта</h3>
+                <div class="form__fields">
+                    <label for="contractNumber">Номер договора:</label>
+                    <input id="contractNumber" type="text" th:field="*{contract.contractNumber}"/>
+
+                    <label for="createDate">Дата заключения:</label>
+                    <input id="createDate" type="date" th:field="*{contract.createDate}"
+                           onchange="updateFinishDate()"/>
+
+                    <label id="duration-label" for="duration" >Длительность контракта:</label>
+                    <input id="duration" type="number" value="1" min="1" max="100" th:field="*{contract.duration}"
+                           oninput="updateFinishDate()"/>
+
+                    <label class="emerging" id="finishDate-label" for="finishDate" hidden>Дата расторжения:</label>
+                    <input class="emerging" id="finishDate" type="date" th:field="*{contract.finishDate}"
+                           hidden readonly/>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <input class="button" type="submit" value="Добавить">
+                <a class="button" th:text="Отмена" th:href="@{/writers}"/>
+            </div>
+        </form>
+
+        <script src="/js/script.js"></script>
+    </section>
+</main>
+</body>
+</html>

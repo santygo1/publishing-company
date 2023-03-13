@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Контракт</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+    <link rel="stylesheet" href="/contract.css" type="text/css">
+</head>
+<body>
+  <main class="content" >
+      <form id="contract-form" th:method="DELETE"
+            th:action="@{/contracts/{id}(id=${contract.getId()})}" hidden></form>
+
+      <section class="info">
+          <h2 class="info__title">Контракт</h2>
+          <hr>
+          <div class="properties-table contract-info">
+              <p class="hint">ID:</p><p th:text="${contract.getId()}"></p>
+              <p class="hint">Номер контракта:</p><p th:text="${contract.getContractNumber()}"></p>
+              <p class="hint">Дата заключения:</p><p th:text="${#temporals.format(contract.getCreateDate(), 'dd.MM.yyyy')}"></p>
+              <p class="hint">Дата расторжения:</p><p th:text="${#temporals.format(contract.getFinishDate(), 'dd.MM.yyyy')}"></p>
+              <p class="hint">Длительность(в годах):</p><p th:text="${contract.getDuration()}"></p>
+              <p class="hint">Расторгнут:</p>
+              <p th:if="${contract.isFinished()}" class="text-red">Да</p>
+              <p th:unless="${contract.isFinished()}" class="text-green">Нет</p>
+          </div>
+          <div class="info__buttons">
+            <a class="button" th:href="@{/contracts/{id}/edit(id=${contract.getId()})}">Изменить</a>
+              <input form="contract-form" type="submit" value="Удалить">
+          </div>
+      </section>
+      <section class="info" th:if="${contract.getWriter() != null}" th:with="writer=${contract.getWriter()}">
+          <h2 class="info__title">Связанный писатель</h2>
+          <hr>
+          <div class="writer-info">
+              <!-- ID -->
+              <div class="properties-table id">
+                  <p class="hint">ID:</p>
+                  <p class="id" th:text="${writer.getId()}"></p>
+              </div>
+              </br>
+              <div class="properties-table general-info">
+                  <p class="properties-table__title">Общая информация</p>
+                  <p class="hint">Имя</p><p th:text="${writer.getFullName().getName()}"></p>
+                  <p class="hint">Фамилия</p><p th:text="${writer.getFullName().getSurname()}"></p>
+                  <p class="hint">Отчество</p><p th:text="${writer.getFullName().getPatronymic()}"></p>
+                  <p class="hint">Адрес</p><p th:text="${writer.getAddress()}"></p>
+                  <p class="hint">Номер телефона</p><p th:text="${writer.getPhoneNumber()}"></p>
+              </div>
+              <div class="properties-table passport-info">
+                  <p class="properties-table__title">Паспортные данные</p>
+                  <p class="hint">Номер</p><p th:text="${writer.getPassportId()}"></p>
+                  <p class="hint">Серия</p><p th:text="${writer.getPassportSeries()}"></p>
+              </div>
+          </div>
+          <a class="writer-link"
+             th:href="@{/writers/{id}(id=${writer.getId()})}">Перейти</a>
+      </section>
+  </main>
+</body>
+</html>

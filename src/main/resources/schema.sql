@@ -1,22 +1,15 @@
 /* TODO:удалить когда деплой */
 DROP TABLE contracts CASCADE;
 DROP TABLE writers CASCADE;
+DROP TABLE books CASCADE;
+DROP TABLE  writers_books CASCADE;
 
-CREATE TABLE IF NOT EXISTS contracts(
-    id VARCHAR PRIMARY KEY,
-    create_date DATE NOT NULL, -- дата заключения контракта
-    duration SMALLINT NOT NULL CONSTRAINT must_be_positive_or_zero CHECK ( duration >= 0 ), -- длительность контракта(кол-во лет)
-    is_finished BOOLEAN DEFAULT FALSE,  -- расторгнут ли контракт
-    finish_date DATE NULL -- дата расторжения контракта
-        CONSTRAINT must_be_bigger_then_create_date CHECK ( finish_date > contracts.create_date )
-);
 CREATE TABLE IF NOT EXISTS writers(
     id VARCHAR PRIMARY KEY,
-    contract_id VARCHAR UNIQUE REFERENCES contracts(id) ON DELETE CASCADE ON UPDATE CASCADE,
 
     /* Паспортные данные*/
-    passport_series SMALLINT NOT NULL,
-    passport_id INTEGER NOT NULL, -- номер паспорта
+    passport_series VARCHAR(4) NOT NULL,
+    passport_id VARCHAR(6) NOT NULL, -- номер паспорта
     surname VARCHAR NOT NULL,
     "name" VARCHAR NOT NULL,
     patronymic VARCHAR NOT NULL,
@@ -27,6 +20,17 @@ CREATE TABLE IF NOT EXISTS writers(
 
     UNIQUE (passport_id, passport_series)
 );
+CREATE TABLE IF NOT EXISTS contracts(
+    id VARCHAR PRIMARY KEY,
+    writer_id VARCHAR REFERENCES writers(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    contract_number VARCHAR UNIQUE NOT NULL,
+    create_date DATE NOT NULL, -- дата заключения контракта
+    duration SMALLINT NOT NULL CONSTRAINT must_be_positive_or_zero CHECK ( duration >= 0 ), -- длительность контракта(кол-во лет)
+    is_finished BOOLEAN DEFAULT FALSE,  -- расторгнут ли контракт
+    finish_date DATE NULL -- дата расторжения контракта
+    CONSTRAINT must_be_bigger_then_create_date CHECK ( finish_date > contracts.create_date )
+);
+
 CREATE TABLE IF NOT EXISTS books(
     id VARCHAR PRIMARY KEY,
     ISBN VARCHAR NOT NULL CONSTRAINT isbn_must_be_unique UNIQUE, -- International Standard Book Number

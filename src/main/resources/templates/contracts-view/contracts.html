@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Контракты | «Печать»</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+</head>
+<body>
+    <main class="content">
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                <th>Номер контракта</th>
+                <th>Дата создания</th>
+                <th>Длительность контракта</br>(в годах)</th>
+                <th>Дата расторжения</th>
+                <th>Расторгнут</th>
+                <th>Писатель</th>
+                </thead>
+                <tbody>
+                <tr th:each="contract : ${contracts}">
+                    <td>
+                        <a th:text="${contract.getContractNumber()}"
+                           th:href="@{/contracts/{id}(id=${contract.getId()})}"></a>
+                    </td>
+                    <td th:text="${#temporals.format(contract.getCreateDate(), 'dd.MM.yyyy')}"></td>
+                    <td th:text="${contract.getDuration()}"></td>
+                    <td th:text="${#temporals.format(contract.getFinishDate(), 'dd.MM.yyyy')}"></td>
+
+                    <td th:if="${contract.isFinished()}" class="text-red">Да</td><td
+                        th:unless="${contract.isFinished()}" class="text-green">Нет</td>
+
+                    <td th:with="writer=${contract.getWriter()}">
+                        <a th:if="${writer != null}"
+                           th:text="${writer.getFullName().initials()}"
+                           th:href="@{/writers/{id}(id=${writer.getId()})}">
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="empty-hint" th:if="${contracts.isEmpty()}">Данные о контрактах отсутствуют</p>
+        </div>
+    </main>
+</body>
+</html>

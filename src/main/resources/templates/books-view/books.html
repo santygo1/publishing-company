@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Книги | «Печать»</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+</head>
+<body>
+<main class="content">
+    <div class="books-table">
+        <div class="table-wrapper">
+            <a th:href="@{/writers/create}" class="button button-add"><p>Добавить</p><img src="/icon/ic_add.svg"/></a>
+            <table class="table">
+                <thead>
+                <th>Писатель</th>
+                <th>Контракт</th>
+                <th>Серия паспорта</th>
+                <th>Номер паспорта</th>
+                <th>Номер телефона</th>
+                </thead>
+                <tbody>
+                <tr th:each="book : ${books}">
+                    <td>
+                        <a th:text="${writer.getFullName().initials()}"
+                           th:href="@{/writers/{id}(id=${writer.getId()})}"></a>
+                    </td>
+
+                    <td th:with="contract=${writer.getContract()}">
+                        <a th:text="${contract.getContractNumber()}" th:href="@{/contracts/{id}(id=${contract.getId()})}"/>
+                    </td>
+
+                    <td th:text="${writer.getPassportSeries()}"/>
+                    <td th:text="${writer.getPassportId()}"/>
+
+                    <td th:text="${writer.getPhoneNumber()}"/>
+                </tr>
+                </tbody>
+            </table>
+            <p class="empty-hint" th:if="${writers.isEmpty()}">Данные о контрактах отсутствуют</p>
+        </div>
+    </div>
+</main>
+</body>
+</html>

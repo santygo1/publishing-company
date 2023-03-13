@@ -1,0 +1,238 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    font-family: "Roboto Light", sans-serif;
+    color: #333333;
+    font-size: 12px;
+    background: #f6f6f6;
+}
+.emerging{
+    animation: .3s show ease;
+}
+@keyframes show {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+input[type="submit"],
+.button{
+    border: solid 1px #d4d4d4;
+    background: transparent;
+    text-decoration: none;
+    color: #333333;
+    padding: 5px 7px;
+    border-radius: 5px;
+    font-family: "Roboto Light", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    transition: all .3s ease;
+    cursor: pointer;
+}
+input[type="submit"]:hover,
+.button:hover{
+    background: rgba(0, 0, 0, 0.1);
+}
+input[type="submit"]:active,
+.button:active{
+    background: rgba(0, 0, 0, 0.05);
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"]{
+    outline: none;
+    border: transparent;
+    border-bottom: 1px solid #c5c5c5;
+    padding: 5px;
+    font-family: "Roboto Light",sans-serif;
+    color: #c5c5c5;
+    transition: all .3s ease;
+    font-size: 12px;
+}
+input[type="text"]:hover,
+input[type="date"]:hover,
+input[type="number"]:hover{
+    border-bottom-color: black;
+    color: black;
+}
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus{
+    color:black;
+    border-bottom-color: #6c5ce7;
+    border-radius: 5px;
+}
+hr{
+    background: #c5c5c5;
+    height: 0.5px;
+    border: none;
+}
+main.content{
+    margin: 20px;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    padding: 20px 15%;
+}
+main.content > section{
+    border-radius: 10px;
+    background: white;
+    padding: 15px 20px 20px;
+}
+section.info > .info__buttons{
+    margin-top: 30px;
+}
+section.info{
+    position: relative;
+}
+p.hint{
+    display: inline-block;
+}
+.text-green{
+    color: lightgreen;
+}
+.text-red{
+    color: lightcoral;
+}
+div.properties-table{
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 150px auto;
+    align-items: center;
+    row-gap: 10px;
+}
+
+section.form{
+    transition: all .3s ease;
+    position: relative;
+}
+section.form .create-form #finishDate{
+    border: transparent;
+}
+section.form .create-form #finishDate{
+    color:#c5c5c5;
+}
+section.form .button-close{
+    display: inline-block;
+    height: 12px;
+    width: 15px;
+    position: absolute;
+    right: 7px;
+    top: 7px;
+    background-image: url("/icon/ic_close.svg");
+    background-size: cover;
+    opacity: 0.5;
+}
+section.form .button-close:hover{
+    background-image: url("/icon/ic_close_red.svg");
+    transition: all .3s ease;
+    opacity: 1;
+}
+section.form .form__fields{
+    margin-top: 20px;
+}
+section.form .form__fields{
+    display: inline-grid;
+    align-items: center;
+    grid-row-gap: 10px;
+    grid-template-columns: 200px 150px;
+}
+section.form .button-container{
+    margin-top: 20px;
+}
+section.form .create-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    gap: 30px;
+}
+
+/*table*/
+.table-wrapper{
+    padding: 15px 20px;
+    border-radius: 10px;
+    background: white;
+}
+table.table{
+    width: 100%;
+    text-align: center;
+    color: #333333;
+    font-size: 12px;
+    border-collapse: collapse;
+}
+table.table thead {
+    font-family: "Roboto",sans-serif;
+    border-bottom: 0.4px solid #c5c5c5;
+}
+table.table th{
+    padding: 7px 0 ;
+}
+table.table  tbody > *:nth-child(odd) {
+}
+table.table td{
+    padding: 10px 5px;
+}
+.empty-hint{
+    color: gray;
+    display: block;
+    margin: 20px 0 10px;
+    text-align: center;
+}
+.button-add img{
+    height: 10px;
+    width: 10px;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+.button-add > *{
+    display: inline;
+}
+.table-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.table-wrapper .button-add{
+    align-self: start;
+}
+
+.info .info__field{
+    margin: 20px 0;
+}
+
+.info .info__field > .properties{
+    display: grid;
+    row-gap: 10px;
+    grid-template-columns: 150px auto;
+}
+.info .info__field > .properties > *:nth-child(odd){
+    border-bottom: dotted 0.5px #d4d4d4;
+    padding-bottom: 2px;
+}
+.info .info__title{
+    font-family: "Roboto Black", sans-serif;
+    font-weight: bold;
+    line-height: 0.7;
+    margin-bottom: 10px;
+}
+.info__field .title{
+    margin-bottom: 5px;
+    font-family: "Roboto Black", sans-serif;
+    font-weight: 700;
+}
+.info{
+    position: relative;
+    background: white;
+    border-radius: 10px;
+    padding: 20px 10px;
+}
+.info .go-to-link{
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+

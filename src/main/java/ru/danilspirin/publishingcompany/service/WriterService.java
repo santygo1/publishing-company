@@ -6,16 +6,18 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.danilspirin.publishingcompany.exceptions.ContractNumberNonUniqueException;
 import ru.danilspirin.publishingcompany.exceptions.EntityAlreadyExistsException;
 import ru.danilspirin.publishingcompany.exceptions.EntityWithIdIsNotExistsException;
 import ru.danilspirin.publishingcompany.exceptions.PassportDataNonUniqueException;
+import ru.danilspirin.publishingcompany.models.Book;
 import ru.danilspirin.publishingcompany.models.Contract;
 import ru.danilspirin.publishingcompany.models.Writer;
+import ru.danilspirin.publishingcompany.repository.BookRepository;
 import ru.danilspirin.publishingcompany.repository.ContractRepository;
 import ru.danilspirin.publishingcompany.repository.WriterRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE)
 @Service
@@ -23,98 +25,108 @@ import java.util.Optional;
 public class WriterService {
     final WriterRepository writerRepository;
     final ContractRepository contractRepository;
+    final BookRepository bookRepository;
 
     @Transactional
-    public Writer addWriterWithContract(Writer writer, Contract contract){
-        // TODO: Оптимизация запросов к базе. (Обработка ошибок вместо обращения с проверкой)
-        // TODO: Проверка пользователя(маловероятно что UUID v4 сгенерирует одинаковый ключ
-        //  но все же)
+    public Writer addWriterWithRelatedContract(Writer writer){
 
-        // Проверка уникальности пользователя по паспортным данным
-        if (writerRepository
-                .findByPassportSeriesAndPassportId(
-                        writer.getPassportSeries(),
-                        writer.getPassportId())
-                .isPresent()) {
-            throw new PassportDataNonUniqueException();
-        }
+        // Проверяем есть ли уже писатель с указанными паспортными данными в базе
+        writerRepository.findByPassportSeriesAndPassportId(
+                writer.getPassportSeries(),
+                writer.getPassportId())
+                // Если есть -> выбрасываем ошибку
+                .ifPresent(writerDB -> {throw new PassportDataNonUniqueException();});
 
-        // Проверка существования контракта по заданному номеру
-        if (contractRepository.findById(contract.getId()).isPresent()) {
-            throw new EntityAlreadyExistsException(contract.getId(), Contract.class);
-        }
+        // Проверяем есть ли уже контракт с заданным номером контракта
+        contractRepository.findByContractNumber(writer.getContract().getContractNumber())
+                // Если есть -> выбрасываем ошибку
+                .ifPresent(contractDB -> {throw new ContractNumberNonUniqueException();});
 
-        writer.setContract(contract);
-        return writerRepository.save(writer);
+        // Связываем сущности
+        Contract contract = writer.getContract();
+        contract.setWriter(writer);
+        Writer created = writerRepository.save(writer);
+        contractRepository.save(contract);
+
+        return created;
     }
 
     public List<Writer> getAll(){
         return writerRepository.findAll();
     }
 
-    public Writer getById(String id){
+    public Writer getWriter(String id){
         return writerRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Writer.class)
                 );
     }
 
-    public Contract getContractByWriterId(String id){
-        return writerRepository.findById(id)
-                .map(Writer::getContract)
-                .orElseThrow(() ->
-                       new EntityWithIdIsNotExistsException(id, Writer.class)
-                );
-    }
-
     @Transactional
-    public Writer changeWriterInfo(String writerId, Writer writer){
-        // Ищем сущность из базы, для обновления
-        Writer findByID = writerRepository.findById(writerId)
-                .map(writerDB -> {
-                    writerDB.setAddress(writer.getAddress());
-                    writerDB.setFullName(writer.getFullName());
-                    writerDB.setPassportId(writer.getPassportId());
-                    writerDB.setPassportSeries(writer.getPassportSeries());
-                    writerDB.setPhoneNumber(writer.getPhoneNumber());
-                    return writerDB;
-                })
-                // Если не нашли кидаем ошибку об отсутствии сущности с таким id
-                .orElseThrow(() ->
-                        new EntityWithIdIsNotExistsException(writerId,Writer.class)
-                );
-        // Сохраняем изменения измененной сущности в базу
-        return writerRepository.save(findByID);
-    }
-
-    @Transactional
-    public Contract replaceContractByWriterId(String id, Contract contract){
-        Writer updatedWriter = writerRepository.findById(id)
-                .map(writer -> {
-                    Contract oldContract = writer.getContract();
-                    // если id контрактов разные изменяем
-                    if (!oldContract.equals(contract)){
-                        log.info(String.format("contract ids are %s",
-                                oldContract.equals(contract)));
-                        writer.setContract(contract);
-                    }
-                    return writer;
-                })
+    public Writer addBook(String id, String bookId){
+        Writer writer =  writerRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Writer.class)
                 );
-        return writerRepository.save(updatedWriter).getContract();
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() ->
+                        new EntityWithIdIsNotExistsException(bookId, Book.class)
+                );
+
+        writer.getBooks().add(book);
+        book.getWriters().add(writer);
+        return writerRepository.save(writer);
     }
 
     @Transactional
-    public void deleteWriterWithContract(String id){
-        Optional<Writer> findById = writerRepository.findById(id);
-        if (findById.isPresent()){
-            Writer writer = findById.get();
-            contractRepository.delete(writer.getContract());
-            writerRepository.delete(writer);
+    public Writer changeWriterInfo(String id, Writer update){
+        Writer updated = writerRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityWithIdIsNotExistsException(id, Contract.class)
+                );
+
+        boolean isUpdatedPassportDataUnique =
+                writerRepository.findByPassportSeriesAndPassportId(update.getPassportSeries(), update.getPassportId())
+                        .map(writer -> writer.getId().equals(updated.getId()))
+                        .orElse(true);
+
+        if (isUpdatedPassportDataUnique){
+            updated.setFullName(update.getFullName());
+            updated.setPhoneNumber(update.getPhoneNumber());
+            updated.setAddress(update.getAddress());
+            updated.setPassportSeries(update.getPassportSeries());
+            updated.setPassportId(update.getPassportId());
+            return writerRepository.save(updated);
         }else{
-            throw new EntityWithIdIsNotExistsException(id, Writer.class);
+            throw new PassportDataNonUniqueException();
         }
+    }
+
+    @Transactional
+    public void deleteWriter(String id){
+        writerRepository.findById(id)
+                .ifPresent(writerDB -> {
+                    writerDB.getContract().setFinished(true);
+                    writerRepository.delete(writerDB);
+                });
+    }
+
+    @Transactional
+    public Writer removeBook(String id, String bookId) {
+        Writer writer = writerRepository.findById(id)
+                .orElseThrow(()->
+                        new EntityWithIdIsNotExistsException(id, Writer.class)
+                );
+        Book unbinding = writer.getBooks().stream()
+                .filter(book -> book.getId().equals(bookId))
+                .findAny()
+                .orElseThrow(() ->
+                        new EntityWithIdIsNotExistsException(id, Book.class)
+                );
+
+        writer.getBooks().remove(unbinding);
+        unbinding.getWriters().remove(writer);
+
+        return writerRepository.save(writer);
     }
 }

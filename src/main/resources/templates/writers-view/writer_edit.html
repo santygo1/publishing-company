@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменение контракта</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+</head>
+<body>
+<main class="content">
+    <section class="form">
+        <a class="button-close" th:href="@{/writers/{id}(id=${writer.getId()})}"></a>
+
+        <form th:method="PATCH" th:action="@{/writers/{id}(id=${writer.getId()})}"
+              th:object="${writer}">
+            <div class="form__fields">
+                <label for="surname">Фамилия:</label>
+                <input id="surname" type="text" th:field="*{fullName.surname}"/>
+
+                <label for="name">Имя:</label>
+                <input id="name" type="text" th:field="*{fullName.name}"/>
+
+                <label for="patronymic">Отчество:</label>
+                <input id="patronymic" type="text" th:field="*{fullName.patronymic}"/>
+
+                <label for="address">Адрес:</label>
+                <input id="address" type="text" th:field="*{address}"/>
+
+                <label for="phoneNumber">Номер телефона:</label>
+                <input id="phoneNumber" type="text" th:field="*{phoneNumber}"/>
+
+                <label for="passportSeries">Серия паспорта:</label>
+                <input id="passportSeries" type="text" maxlength="4" th:field="*{passportSeries}"/>
+
+                <label for="passportId">Номер паспорта:</label>
+                <input id="passportId" type="text" maxlength="6" th:field="*{passportId}"/>
+            </div>
+            <div class="button-container">
+                <input class="button" type="submit" value="Изменить">
+                <a class="button" th:text="Отмена" th:href="@{/writers/{id}(id=${writer.getId()})}"/>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

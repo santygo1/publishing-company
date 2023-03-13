@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменение контракта</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+</head>
+<body>
+    <main class="content">
+        <section class="form">
+            <a class="button-close" th:href="@{/contracts/{id}(id=${contract.getId()})}"></a>
+            <form th:method="PATCH" th:action="@{/contracts/{id}(id=${contract.getId()})}"
+                  th:object="${contract}">
+                <div class="form__fields">
+                    <label for="contractNumber">Номер договора:</label>
+                    <input id="contractNumber" type="text" th:field="*{contractNumber}"/>
+                    <label for="createDate">Дата заключения:</label>
+                    <input id="createDate" th:value="${#temporals.format(contract.getCreateDate(), 'yyyy-MM-dd')}" type="date" th:field="*{createDate}"/>
+                    <label for="duration">Длительность контракта:</label>
+                    <input id="duration" type="number" th:field="*{duration}"/>
+                </div>
+                <div class="button-container">
+                    <input class="button" type="submit" value="Изменить">
+                    <a class="button" th:text="Отмена" th:href="@{/contracts/{id}(id=${contract.getId()})}"/>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

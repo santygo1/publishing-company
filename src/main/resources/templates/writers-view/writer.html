@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Писатель</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+    <link rel="stylesheet" href="/writers.css" type="text/css">
+</head>
+<body>
+    <form id="contract-form" th:method="DELETE" th:action="@{/writers/{id}(id=${writer.getId()})}" hidden></form>
+
+    <main class="content" >
+            <section class="info writer__info">
+                <h2 class="info__title">Писатель</h2>
+                <hr>
+
+                <div class="info__field">
+                    <div class="properties">
+                        <p class="hint">ID</p><p th:text="${writer.getId()}"></p>
+                    </div>
+                </div>
+
+                <div class="info__field">
+                    <p class="title">Общая информация</p>
+                    <div class="properties" th:with="fio=${writer.getFullName()}">
+                        <p class="hint">Фамилия</p><p th:text="${fio.getSurname()}"></p>
+                        <p class="hint">Имя</p><p th:text="${fio.getName()}"></p>
+                        <p class="hint">Отчество</p><p th:text="${fio.getPatronymic()}"></p>
+                        <p class="hint">Адрес</p><p th:text="${writer.getAddress()}"/>
+                        <p class="hint">Номер телефона</p><p th:text="${writer.getPhoneNumber()}"/>
+                    </div>
+                </div>
+
+                <div class="info__field">
+                    <p class="title">Паспортные данные</p>
+                    <div class="properties">
+                        <p class="hint">Cерия</p><p th:text="${writer.getPassportSeries()}"></p>
+                        <p class="hint">Номер</p><p th:text="${writer.getPassportId()}"></p>
+                    </div>
+                </div>
+
+
+                <div class="info__buttons">
+                    <a class="button" th:href="@{/writers/{id}/edit(id=${writer.getId()})}">Изменить</a>
+                    <input form="contract-form" type="submit" value="Удалить">
+                </div>
+            </section>
+
+            <section class="info" th:with="contract=${writer.getContract()}">
+                <h2 class="info__title">Связанный контракт</h2>
+                <hr>
+                <div class="info__field">
+                    <div class="properties">
+                        <p class="hint">ID</p><p th:text="${contract.getId()}"></p>
+                        <p class="hint">Номер контракта</p><p th:text="${contract.getContractNumber()}"/>
+                        <p class="hint">Дата заключения</p><p th:text="${#temporals.format(contract.getCreateDate(), 'dd.MM.yyyy')}"/>
+                        <p class="hint">Дата расторжения</p><p th:text="${#temporals.format(contract.getFinishDate(), 'dd.MM.yyyy')}"/>
+                        <p class="hint">Длительность (в годах)</p><p th:text="${contract.getDuration()}"/>
+                    </div>
+                </div>
+                <a class="go-to-link" th:href="@{/contracts/{id}(id=${contract.getId()})}">Перейти</a>
+            </section>
+
+            <section id="books" class="info" th:with="contract=${writer.getContract()}">
+                <h2 class="info__title">Написанные книги</h2>
+                <a class="go-to-link" th:href="@{/books}">Все</a>
+                <hr>
+                <form class="select-book-form" th:unless="${books.isEmpty()}" th:method="PATCH" th:action="@{/writers/{id}/books(id=${writer.getId()})}">
+                    <select name="selectedBookId">
+                        <option value="" selected>Выбрать книгу</option>
+                        <option th:each="book: ${books}" th:value="${book.getId()}"
+                                th:text="'«' + ${book.getTitle()} + '»' +' - ' + 'ISBN: '+ ${book.getISBN()}"/>
+                    </select>
+                    <input type="submit" value="Добавить"/>
+                </form>
+                <div class="books">
+                    <p th:if="${writer.getBooks().isEmpty()}" class="empty-hint">Писатель не связан ни с одной книгой</p>
+                    <div th:unless="${writer.getBooks().isEmpty()}"
+                         th:each="book : ${writer.getBooks()}"
+                         class="info__field ">
+
+                        <div class="book">
+                            <form th:method="DELETE"
+                                  id="delete-book-form" hidden
+                                  th:action="@{/writers/{id}/books/{bookId}(id=${writer.getId()},bookId=${book.getId()})}">
+                            </form>
+                            <p class="book__title" th:text="${book.getTitle()}"/>
+                            <div class="properties-table">
+                                <p>Дата:</p>
+                                <p th:text="${#temporals.format(book.getIssueDate(),'dd.MM.yyyy')}"/>
+                                <p>ISBN:</p>
+                                <p th:text="${book.getISBN()}"/>
+                            </div>
+
+                            <div class="button-container">
+                                <a class="button" th:href="@{/books/{id}(id=${book.getId()})}">Посмотреть</a>
+                                <input form="delete-book-form" type="submit" value="Удалить">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+    </main>
+</body>
+</html>

@@ -8,8 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface WriterRepository extends JpaRepository<Writer, String> {
-
     Optional<Writer> findByPassportSeriesAndPassportId(
-             short passportSeries, int passportId
+             String passportSeries, String passportId
     );
 }
