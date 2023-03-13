@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Писатель</title>
     <link rel="stylesheet" href="/styles.css" type="text/css">
-    <link rel="stylesheet" href="/writers.css" type="text/css">
 </head>
 <body>
     <form id="contract-form" th:method="DELETE" th:action="@{/writers/{id}(id=${writer.getId()})}" hidden></form>
@@ -65,7 +64,7 @@
                 <h2 class="info__title">Написанные книги</h2>
                 <a class="go-to-link" th:href="@{/books}">Все</a>
                 <hr>
-                <form class="select-book-form" th:unless="${books.isEmpty()}" th:method="PATCH" th:action="@{/writers/{id}/books(id=${writer.getId()})}">
+                <form class="select-card-form" th:unless="${books.isEmpty()}" th:method="PATCH" th:action="@{/writers/{id}/books(id=${writer.getId()})}">
                     <select name="selectedBookId">
                         <option value="" selected>Выбрать книгу</option>
                         <option th:each="book: ${books}" th:value="${book.getId()}"
@@ -73,13 +72,13 @@
                     </select>
                     <input type="submit" value="Добавить"/>
                 </form>
-                <div class="books">
+                <div class="card-wrapper">
                     <p th:if="${writer.getBooks().isEmpty()}" class="empty-hint">Писатель не связан ни с одной книгой</p>
                     <div th:unless="${writer.getBooks().isEmpty()}"
                          th:each="book : ${writer.getBooks()}"
                          class="info__field ">
 
-                        <div class="book">
+                        <div class="card">
                             <form th:method="DELETE"
                                   id="delete-book-form" hidden
                                   th:action="@{/writers/{id}/books/{bookId}(id=${writer.getId()},bookId=${book.getId()})}">
