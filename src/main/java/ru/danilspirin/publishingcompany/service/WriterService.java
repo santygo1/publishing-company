@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.danilspirin.publishingcompany.exceptions.ContractNumberNonUniqueException;
-import ru.danilspirin.publishingcompany.exceptions.EntityAlreadyExistsException;
 import ru.danilspirin.publishingcompany.exceptions.EntityWithIdIsNotExistsException;
 import ru.danilspirin.publishingcompany.exceptions.PassportDataNonUniqueException;
 import ru.danilspirin.publishingcompany.models.Book;
@@ -17,15 +16,16 @@ import ru.danilspirin.publishingcompany.repository.BookRepository;
 import ru.danilspirin.publishingcompany.repository.ContractRepository;
 import ru.danilspirin.publishingcompany.repository.WriterRepository;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-@RequiredArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE)
+@RequiredArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 @Slf4j
 public class WriterService {
-    final WriterRepository writerRepository;
-    final ContractRepository contractRepository;
-    final BookRepository bookRepository;
+    WriterRepository writerRepository;
+    ContractRepository contractRepository;
+    BookRepository bookRepository;
 
     @Transactional
     public Writer addWriterWithRelatedContract(Writer writer){
@@ -51,8 +51,8 @@ public class WriterService {
         return created;
     }
 
-    public List<Writer> getAll(){
-        return writerRepository.findAll();
+    public Set<Writer> getAll(){
+        return new HashSet<>(writerRepository.findAll());
     }
 
     public Writer getWriter(String id){
