@@ -63,22 +63,6 @@ public class WriterService {
     }
 
     @Transactional
-    public Writer addBook(String id, String bookId){
-        Writer writer =  writerRepository.findById(id)
-                .orElseThrow(() ->
-                        new EntityWithIdIsNotExistsException(id, Writer.class)
-                );
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() ->
-                        new EntityWithIdIsNotExistsException(bookId, Book.class)
-                );
-
-        writer.getBooks().add(book);
-        book.getWriters().add(writer);
-        return writerRepository.save(writer);
-    }
-
-    @Transactional
     public Writer changeWriterInfo(String id, Writer update){
         Writer updated = writerRepository.findById(id)
                 .orElseThrow(() ->
@@ -112,6 +96,23 @@ public class WriterService {
     }
 
     @Transactional
+    public Writer addBook(String id, String bookId){
+        Writer writer =  writerRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityWithIdIsNotExistsException(id, Writer.class)
+                );
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() ->
+                        new EntityWithIdIsNotExistsException(bookId, Book.class)
+                );
+
+        writer.getBooks().add(book);
+        book.getWriters().add(writer);
+        bookRepository.save(book);
+        return writerRepository.save(writer);
+    }
+
+    @Transactional
     public Writer removeBook(String id, String bookId) {
         Writer writer = writerRepository.findById(id)
                 .orElseThrow(()->
@@ -121,12 +122,11 @@ public class WriterService {
                 .filter(book -> book.getId().equals(bookId))
                 .findAny()
                 .orElseThrow(() ->
-                        new EntityWithIdIsNotExistsException(id, Book.class)
+                        new EntityWithIdIsNotExistsException(bookId, Book.class)
                 );
 
         writer.getBooks().remove(unbinding);
         unbinding.getWriters().remove(writer);
-
         return writerRepository.save(writer);
     }
 }
