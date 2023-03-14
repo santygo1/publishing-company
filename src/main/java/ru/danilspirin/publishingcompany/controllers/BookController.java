@@ -3,6 +3,7 @@ package ru.danilspirin.publishingcompany.controllers;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 @Controller
 @RequestMapping("/books")
 public class BookController {
@@ -58,6 +60,24 @@ public class BookController {
         return "redirect:/books";
     }
 
+    @PatchMapping("/{id}/writers")
+    public String bindWriter(
+            @PathVariable String id,
+            @RequestParam("selectedWriterId") String writerId){
+        if (!writerId.equals("")) {
+            id = bookService.addWriter(id, writerId)
+                    .getId();
+        }
+        return "redirect:/books/" + id + "#writers";
+    }
+
+    @DeleteMapping("/{id}/writers/{writerId}")
+    public String unbindingWriter(@PathVariable String id, @PathVariable String writerId){
+        log.info("Удаление писателя с id {} из книги с id {}", writerId, id);
+        id = bookService.removeWriter(id, writerId)
+                .getId();
+        return "redirect:/books/" + id + "#writers";
+    }
 
 
 }

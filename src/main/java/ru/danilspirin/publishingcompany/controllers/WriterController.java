@@ -67,22 +67,6 @@ public class WriterController {
         return "writers-view/writer_edit";
     }
 
-    @PatchMapping("/{id}/books")
-    public String bindBook(
-            @PathVariable String id,
-            @RequestParam("selectedBookId") String bindingBookId){
-        if (!bindingBookId.equals("")) {
-            writerService.addBook(id, bindingBookId);
-        }
-        return "redirect:/writers/" + id + "#books";
-    }
-
-    @DeleteMapping("/{id}/books/{bookId}")
-    public String unbindingBook(@PathVariable String id, @PathVariable String bookId){
-        writerService.removeBook(id, bookId);
-        return "redirect:/writers/" + id+"#books";
-    }
-
     @PatchMapping("/{id}")
     public String editWriter(@PathVariable String id, @ModelAttribute("writer") Writer update){
         writerService.changeWriterInfo(id,update);
@@ -93,6 +77,24 @@ public class WriterController {
     public String deleteWriter(@PathVariable String id ){
         writerService.deleteWriter(id);
         return "redirect:/writers";
+    }
+
+    @PatchMapping("/{id}/books")
+    public String bindBook(
+            @PathVariable String id,
+            @RequestParam("selectedBookId") String bookId){
+        if (!bookId.equals("")) {
+            id = writerService.addBook(id, bookId)
+                    .getId();
+        }
+        return "redirect:/writers/" + id + "#books";
+    }
+
+    @DeleteMapping("/{id}/books/{bookId}")
+    public String unbindingBook(@PathVariable String id, @PathVariable String bookId){
+        id = writerService.removeBook(id, bookId)
+                .getId();
+        return "redirect:/writers/" + id +"#books";
     }
 
 }
