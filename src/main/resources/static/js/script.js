@@ -30,9 +30,10 @@ function updateAbsoluteFee(){
         circulationField.value !== '0')
     {
         let absoluteFee = (parseInt(sellingPriceField.value) - parseInt(costPriceField.value)) * parseInt(circulationField.value);
+        console.log()
         if (absoluteFee >= 0){
             absoluteFeeField.setAttribute('value',
-                ''+ Math.round(absoluteFee/1000)) ;
+                '' + Math.round(absoluteFee/1000)) ;
         }
     }
 }
