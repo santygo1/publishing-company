@@ -15,7 +15,8 @@ import ru.danilspirin.publishingcompany.service.WriterService;
 
 import java.util.Set;
 
-@RequiredArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 @Controller
 @RequestMapping("/writers")
@@ -25,13 +26,13 @@ public class WriterController {
     BookService bookService;
 
     @GetMapping()
-    public String showAllWriters(Model model){
+    public String showAllWriters(Model model) {
         model.addAttribute("writers", writerService.getAll());
         return "writers-view/writers";
     }
 
     @GetMapping("/{id}")
-    public String showWriter(@PathVariable String id, Model model){
+    public String showWriter(@PathVariable String id, Model model) {
         Writer writer = writerService.getWriter(id);
         model.addAttribute("writer", writer);
 
@@ -44,7 +45,7 @@ public class WriterController {
     }
 
     @GetMapping("/create")
-    public String showCreateNewWriterAndContractForm(Model map){
+    public String showCreateNewWriterAndContractForm(Model map) {
         Writer writer = new Writer();
         writer.setContract(new Contract());
         map.addAttribute("writer", writer);
@@ -54,14 +55,14 @@ public class WriterController {
 
     @PostMapping
     public String createNewWriterAndContract(
-            @ModelAttribute Writer writer){
+            @ModelAttribute Writer writer) {
         Writer created = writerService.addWriterWithRelatedContract(writer);
         log.info("Дата : {}", writer.getContract().getFinishDate());
         return "redirect:/writers/" + created.getId();
     }
 
     @GetMapping("/{id}/edit")
-    public String showEditForm(@PathVariable String id, Model model){
+    public String showEditForm(@PathVariable String id, Model model) {
         Writer writer = writerService.getWriter(id);
         model.addAttribute("writer", writer);
 
@@ -70,13 +71,13 @@ public class WriterController {
 
     @PatchMapping("/{id}")
     public String editWriter(@PathVariable String id,
-                             @ModelAttribute("writer") Writer update){
-        writerService.changeWriterInfo(id,update);
-        return "redirect:/writers/" + id;
+                             @ModelAttribute("writer") Writer update) {
+        Writer updated = writerService.changeWriterInfo(id, update);
+        return "redirect:/writers/" + updated.getId();
     }
 
     @DeleteMapping("/{id}")
-    public String deleteWriter(@PathVariable String id ){
+    public String deleteWriter(@PathVariable String id) {
         writerService.deleteWriter(id);
         return "redirect:/writers";
     }
@@ -84,7 +85,7 @@ public class WriterController {
     @PatchMapping("/{id}/books")
     public String bindBook(
             @PathVariable String id,
-            @RequestParam("selectedBookId") String bookId){
+            @RequestParam("selectedBookId") String bookId) {
         if (!bookId.equals("")) {
             id = writerService.addBook(id, bookId)
                     .getId();
@@ -93,10 +94,10 @@ public class WriterController {
     }
 
     @DeleteMapping("/{id}/books/{bookId}")
-    public String unbindingBook(@PathVariable String id, @PathVariable String bookId){
+    public String unbindingBook(@PathVariable String id, @PathVariable String bookId) {
         id = writerService.removeBook(id, bookId)
                 .getId();
-        return "redirect:/writers/" + id +"#books";
+        return "redirect:/writers/" + id + "#books";
     }
 
 }
