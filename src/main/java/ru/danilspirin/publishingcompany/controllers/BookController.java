@@ -52,5 +52,12 @@ public class BookController {
         return "redirect:/books/" + created.getId();
     }
 
+    @DeleteMapping("{id}")
+    public String deleteBook(@PathVariable String id){
+        bookService.deleteBook(id);
+        return "redirect:/books";
+    }
+
+
 
 }
