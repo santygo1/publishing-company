@@ -23,7 +23,7 @@
       <div class="properties">
         <p class="hint">ISBN</p><p th:text="${book.getISBN()}"/>
         <p class="hint">Название</p><p th:text="${book.getTitle()}"/>
-        <p class="hint">Тираж</p><p th:text="${book.getCirculation()}"></p>
+        <p class="hint">Тираж</p><p th:text="${book.getCirculation()} + ' экз.'"></p>
         <p class="hint">Дата печати</p><p th:text="${#temporals.format(book.getIssueDate(),'dd.MM.yyyy')}"/>
       </div>
     </div>
@@ -84,7 +84,7 @@
       <input type="submit" value="Добавить"/>
     </form>
     <div class="card-wrapper">
-      <p th:if="${book.getWriters().isEmpty()}" class="empty-hint">С данной книгой не связано ни один писатель.</p>
+      <p th:if="${book.getWriters().isEmpty()}" class="empty-hint">У данной книги нет авторов</p>
       <div th:unless="${book.getWriters().isEmpty()}"
            th:each="writer : ${book.getWriters()}"
            class="info__field ">

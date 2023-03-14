@@ -22,10 +22,12 @@ public class BookService {
     BookRepository bookRepository;
 
     @Transactional
-    public Book create(Book book){
-        bookRepository.findById(book.getId()).ifPresent(book1 -> {
-                throw new EntityAlreadyExistsException(book.getId(), Book.class);
-        });
+    public Book addBook(Book book) throws  IsbnNonUniqueException {
+        // Если добавляемая книга имеет не уникальный ISBN
+        bookRepository.findByISBN(book.getISBN())
+                // То выбрасываем ошибку
+                .ifPresent(bookDB -> {throw new IsbnNonUniqueException();});
+
         return bookRepository.save(book);
     }
 
@@ -33,21 +35,11 @@ public class BookService {
         return new HashSet<>(bookRepository.findAll());
     }
 
-    public Book getBook(String id){
+    public Book getBook(String id) throws EntityWithIdIsNotExistsException{
         return bookRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Book.class)
                 );
-    }
-
-    @Transactional
-    public Book addBook(Book book) {
-        // Если добавляемая книга имеет не уникальный ISBN
-        bookRepository.findByISBN(book.getISBN())
-                //
-                .ifPresent(bookDB -> {throw new IsbnNonUniqueException();});
-
-        return bookRepository.save(book);
     }
 
     public Set<Writer> getWriters(String id) {

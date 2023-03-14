@@ -18,3 +18,21 @@ function updateFinishDate(){
         finishDateField.setAttribute('value', '' );
     }
 }
+
+function updateAbsoluteFee(){
+    let circulationField = document.getElementById('circulation');
+    let costPriceField = document.getElementById('costPrice');
+    let sellingPriceField = document.getElementById('sellingPrice');
+    let absoluteFeeField = document.getElementById('absoluteFee');
+
+    if (sellingPriceField.value !== '0' &&
+        costPriceField.value !== '0' &&
+        circulationField.value !== '0')
+    {
+        let absoluteFee = (parseInt(sellingPriceField.value) - parseInt(costPriceField.value)) * parseInt(circulationField.value);
+        if (absoluteFee >= 0){
+            absoluteFeeField.setAttribute('value',
+                ''+ Math.round(absoluteFee/1000)) ;
+        }
+    }
+}

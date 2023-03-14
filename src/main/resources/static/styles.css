@@ -285,5 +285,13 @@ table.table td{
 .select-card-form select:focus{
     border-color: #6c5ce7;
 }
+.input-with-hint-wrapper{
+    display: flex;
+}
+.input-with-hint-wrapper .input-hint{
+    margin-left: 10px;
+    white-space: nowrap;
+    color: #c5c5c5;
+}
 
 

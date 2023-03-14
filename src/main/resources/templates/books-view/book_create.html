@@ -1,10 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Создание книги</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
 </head>
 <body>
-$END$
+<main class="content">
+    <section class="form">
+        <a class="button-close" th:href="@{/books}"></a>
+
+        <form class="create-form"
+              th:method="POST"
+              th:action="@{/books}"
+              data-th-object="${book}">
+
+            <div class="wrapper">
+                <h3 class="subfield__title">Добавление книги</h3>
+                <div class="form__fields">
+                    <label for="isbn">ISBN:</label>
+                    <input id="isbn" type="text" th:field="*{ISBN}"/>
+
+                    <label for="title">Название:</label>
+                    <input id="title" type="text" th:field="*{title}"/>
+
+                    <label for="circulation">Тираж:</label>
+                    <div class="input-with-hint-wrapper">
+                        <input id="circulation" type="number"
+                               onchange="updateAbsoluteFee()"
+                               min="0" th:field="*{circulation}"/>
+                        <p class="input-hint" th:text="'экз.'"/>
+                    </div>
+
+                    <label for="issueDate">Дата печати:</label>
+                    <input id="issueDate" type="date" th:field="*{issueDate}"/>
+
+                    <label for="costPrice">Себестоимость:</label>
+                    <div class="input-with-hint-wrapper">
+                        <input id="costPrice" type="number" min="0"
+                               onchange="updateAbsoluteFee()" th:field="*{costPrice}"/>
+                        <p class="input-hint" th:text="'руб.'"/>
+                    </div>
+
+                    <label for="sellingPrice">Цена продажи:</label>
+                    <div class="input-with-hint-wrapper">
+                        <input id="sellingPrice" type="number" min="0"
+                               onchange="updateAbsoluteFee()" th:field="*{sellingPrice}"/>
+                        <p class="input-hint" th:text="'руб.'" />
+                    </div>
+
+                    <label for="absoluteFee">Гонорар:</label>
+                    <div class="input-with-hint-wrapper">
+                        <input id="absoluteFee" type="number" min="0"
+                               th:field="*{absoluteFee}"/>
+                        <p class="input-hint" th:text="'тыс. руб.'"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <input class="button" type="submit" value="Добавить">
+                <a class="button" th:text="Отмена" th:href="@{/writers}"/>
+            </div>
+        </form>
+
+        <script src="/js/script.js"></script>
+    </section>
+</main>
 </body>
 </html>
