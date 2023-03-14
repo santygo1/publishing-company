@@ -12,6 +12,7 @@
 
         <form th:method="PATCH" th:action="@{/writers/{id}(id=${writer.getId()})}"
               th:object="${writer}">
+            <h3 class="subfield__title">Редактирование книги</h3>
             <div class="form__fields">
                 <label for="surname">Фамилия:</label>
                 <input id="surname" type="text" th:field="*{fullName.surname}"/>
