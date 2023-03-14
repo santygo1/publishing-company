@@ -19,7 +19,8 @@ import ru.danilspirin.publishingcompany.repository.WriterRepository;
 import java.util.HashSet;
 import java.util.Set;
 
-@RequiredArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 @Slf4j
 public class WriterService {
@@ -28,19 +29,23 @@ public class WriterService {
     BookRepository bookRepository;
 
     @Transactional
-    public Writer addWriterWithRelatedContract(Writer writer){
+    public Writer addWriterWithRelatedContract(Writer writer) {
 
         // Проверяем есть ли уже писатель с указанными паспортными данными в базе
         writerRepository.findByPassportSeriesAndPassportId(
-                writer.getPassportSeries(),
-                writer.getPassportId())
+                        writer.getPassportSeries(),
+                        writer.getPassportId())
                 // Если есть -> выбрасываем ошибку
-                .ifPresent(writerDB -> {throw new PassportDataNonUniqueException();});
+                .ifPresent(writerDB -> {
+                    throw new PassportDataNonUniqueException();
+                });
 
         // Проверяем есть ли уже контракт с заданным номером контракта
         contractRepository.findByContractNumber(writer.getContract().getContractNumber())
                 // Если есть -> выбрасываем ошибку
-                .ifPresent(contractDB -> {throw new ContractNumberNonUniqueException();});
+                .ifPresent(contractDB -> {
+                    throw new ContractNumberNonUniqueException();
+                });
 
         // Связываем сущности
         Contract contract = writer.getContract();
@@ -51,11 +56,11 @@ public class WriterService {
         return created;
     }
 
-    public Set<Writer> getAll(){
+    public Set<Writer> getAll() {
         return new HashSet<>(writerRepository.findAll());
     }
 
-    public Writer getWriter(String id){
+    public Writer getWriter(String id) {
         return writerRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Writer.class)
@@ -63,31 +68,32 @@ public class WriterService {
     }
 
     @Transactional
-    public Writer changeWriterInfo(String id, Writer update){
-        Writer updated = writerRepository.findById(id)
+    public Writer changeWriterInfo(String id, Writer update) {
+        Writer updatedWriter = writerRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Contract.class)
                 );
 
-        boolean isUpdatedPassportDataUnique =
-                writerRepository.findByPassportSeriesAndPassportId(update.getPassportSeries(), update.getPassportId())
-                        .map(writer -> writer.getId().equals(updated.getId()))
-                        .orElse(true);
+        writerRepository.findByPassportSeriesAndPassportId(
+                        update.getPassportSeries(),
+                        update.getPassportId())
+                .ifPresent(writerDB -> {
+                    if (!writerDB.getId().equals(updatedWriter.getId())){
+                        throw new PassportDataNonUniqueException();
+                    }
+                });
 
-        if (isUpdatedPassportDataUnique){
-            updated.setFullName(update.getFullName());
-            updated.setPhoneNumber(update.getPhoneNumber());
-            updated.setAddress(update.getAddress());
-            updated.setPassportSeries(update.getPassportSeries());
-            updated.setPassportId(update.getPassportId());
-            return writerRepository.save(updated);
-        }else{
-            throw new PassportDataNonUniqueException();
-        }
+        updatedWriter.setFullName(update.getFullName());
+        updatedWriter.setPassportSeries(update.getPassportSeries());
+        updatedWriter.setPassportId(updatedWriter.getPassportId());
+        updatedWriter.setAddress(update.getAddress());
+        updatedWriter.setPhoneNumber(update.getPhoneNumber());
+
+        return writerRepository.save(updatedWriter);
     }
 
     @Transactional
-    public void deleteWriter(String id){
+    public void deleteWriter(String id) {
         writerRepository.findById(id)
                 .ifPresent(writerDB -> {
                     writerDB.getContract().setFinished(true);
@@ -96,8 +102,8 @@ public class WriterService {
     }
 
     @Transactional
-    public Writer addBook(String id, String bookId){
-        Writer writer =  writerRepository.findById(id)
+    public Writer addBook(String id, String bookId) {
+        Writer writer = writerRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Writer.class)
                 );
@@ -115,7 +121,7 @@ public class WriterService {
     @Transactional
     public Writer removeBook(String id, String bookId) {
         Writer writer = writerRepository.findById(id)
-                .orElseThrow(()->
+                .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Writer.class)
                 );
         Book unbinding = writer.getBooks().stream()

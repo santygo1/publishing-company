@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.danilspirin.publishingcompany.exceptions.ContractNumberNonUniqueException;
 import ru.danilspirin.publishingcompany.exceptions.EntityWithIdIsNotExistsException;
 import ru.danilspirin.publishingcompany.exceptions.PassportDataNonUniqueException;
 import ru.danilspirin.publishingcompany.models.Contract;
@@ -39,24 +40,24 @@ public class ContractService {
 
     @Transactional
     public Contract changeContractInfo(String id, Contract update){
-        Contract updated = contractRepository.findById(id)
+        Contract updatedContract = contractRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Contract.class)
                 );
 
-        boolean isUpdatedContractNumberUnique =
-                contractRepository.findByContractNumber(update.getContractNumber())
-                        .map(contract -> contract.getId().equals(updated.getId()))
-                        .orElse(true);
-        if (isUpdatedContractNumberUnique){
-            updated.setContractNumber(update.getContractNumber());
-            updated.setCreateDate(update.getCreateDate());
-            updated.setDuration(update.getDuration());
-            updated.setFinishDate(updated.getCreateDate().plusYears(update.getDuration()));
-            return contractRepository.save(updated);
-        }else {
-            throw new PassportDataNonUniqueException();
-        }
+        contractRepository.findByContractNumber(update.getContractNumber())
+                .ifPresent(contractDB -> {
+                    if (!contractDB.getId().equals(updatedContract.getId())){
+                        throw new ContractNumberNonUniqueException();
+                    }
+                });
+
+        updatedContract.setContractNumber(update.getContractNumber());
+        updatedContract.setCreateDate(update.getCreateDate());
+        updatedContract.setDuration(update.getDuration());
+        updatedContract.setFinishDate(updatedContract.getCreateDate().plusYears(update.getDuration()));
+
+        return contractRepository.save(updatedContract);
     }
 
     @Transactional

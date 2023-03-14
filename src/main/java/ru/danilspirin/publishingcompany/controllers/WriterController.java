@@ -44,7 +44,7 @@ public class WriterController {
     }
 
     @GetMapping("/create")
-    public String showEditForm(Model map){
+    public String showCreateNewWriterAndContractForm(Model map){
         Writer writer = new Writer();
         writer.setContract(new Contract());
         map.addAttribute("writer", writer);
@@ -53,7 +53,8 @@ public class WriterController {
     }
 
     @PostMapping
-    public String createNewWriterWithRelatedContract(@ModelAttribute Writer writer){
+    public String createNewWriterAndContract(
+            @ModelAttribute Writer writer){
         Writer created = writerService.addWriterWithRelatedContract(writer);
         log.info("Дата : {}", writer.getContract().getFinishDate());
         return "redirect:/writers/" + created.getId();
@@ -68,7 +69,8 @@ public class WriterController {
     }
 
     @PatchMapping("/{id}")
-    public String editWriter(@PathVariable String id, @ModelAttribute("writer") Writer update){
+    public String editWriter(@PathVariable String id,
+                             @ModelAttribute("writer") Writer update){
         writerService.changeWriterInfo(id,update);
         return "redirect:/writers/" + id;
     }
