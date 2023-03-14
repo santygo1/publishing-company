@@ -17,29 +17,32 @@ import ru.danilspirin.publishingcompany.repository.WriterRepository;
 import java.util.HashSet;
 import java.util.Set;
 
-@RequiredArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 @Service
 public class BookService {
-    
+
     BookRepository bookRepository;
     WriterRepository writerRepository;
 
     @Transactional
-    public Book addBook(Book book) throws  IsbnNonUniqueException {
+    public Book addBook(Book book) throws IsbnNonUniqueException {
         // Если добавляемая книга имеет не уникальный ISBN
         bookRepository.findByISBN(book.getISBN())
                 // То выбрасываем ошибку
-                .ifPresent(bookDB -> {throw new IsbnNonUniqueException();});
+                .ifPresent(bookDB -> {
+                    throw new IsbnNonUniqueException();
+                });
 
         return bookRepository.save(book);
     }
 
-    public Set<Book> getAll(){
+    public Set<Book> getAll() {
         return new HashSet<>(bookRepository.findAll());
     }
 
-    public Book getBook(String id) throws EntityWithIdIsNotExistsException{
+    public Book getBook(String id) throws EntityWithIdIsNotExistsException {
         return bookRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Book.class)
@@ -47,7 +50,32 @@ public class BookService {
     }
 
     @Transactional
-    public void deleteBook(String id){
+    public Book changeBookInfo(String id, Book update) {
+        Book updatedBook =  bookRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityWithIdIsNotExistsException(id, Book.class)
+                );
+
+        bookRepository.findByISBN(update.getISBN())
+                .ifPresent( bookDB -> {
+                    if (!bookDB.getId().equals(updatedBook.getId())){
+                        throw new IsbnNonUniqueException();
+                    }
+                });
+
+        updatedBook.setISBN(update.getISBN());
+        updatedBook.setTitle(update.getTitle());
+        updatedBook.setCirculation(update.getCirculation());
+        updatedBook.setIssueDate(update.getIssueDate());
+        updatedBook.setCostPrice(update.getCostPrice());
+        updatedBook.setSellingPrice(update.getSellingPrice());
+        updatedBook.setAbsoluteFee(update.getAbsoluteFee());
+
+        return bookRepository.save(updatedBook);
+    }
+
+    @Transactional
+    public void deleteBook(String id) {
         bookRepository.deleteById(id);
     }
 
@@ -57,7 +85,7 @@ public class BookService {
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Book.class)
                 );
-        Writer writer =  writerRepository.findById(writerId)
+        Writer writer = writerRepository.findById(writerId)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(writerId, Writer.class)
                 );
@@ -70,14 +98,14 @@ public class BookService {
     @Transactional
     public Book removeWriter(String id, String writerId) {
         Book book = bookRepository.findById(id)
-                .orElseThrow(()->
+                .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Book.class)
                 );
 
         Writer unbinding = book.getWriters().stream()
                 .filter(writer -> writer.getId().equals(writerId))
                 .findAny()
-                .orElseThrow(() ->{
+                .orElseThrow(() -> {
                     log.info("Здесь");
                     return new EntityWithIdIsNotExistsException(writerId, Writer.class);
                 });
