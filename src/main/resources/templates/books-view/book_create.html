@@ -44,7 +44,7 @@
 
                     <label for="sellingPrice">Цена продажи:</label>
                     <div class="input-with-hint-wrapper">
-                        <input id="sellingPrice" type="number" min="0"
+                        <input id="sellingPrice" type="number" min="0" value="0"
                                onchange="updateAbsoluteFee()" th:field="*{sellingPrice}"/>
                         <p class="input-hint" th:text="'руб.'" />
                     </div>

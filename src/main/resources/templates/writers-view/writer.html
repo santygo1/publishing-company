@@ -73,7 +73,7 @@
                     <input type="submit" value="Добавить"/>
                 </form>
                 <div class="card-wrapper">
-                    <p th:if="${writer.getBooks().isEmpty()}" class="empty-hint">Писатель не связан ни с одной книгой</p>
+                    <p th:if="${writer.getBooks().isEmpty()}" class="empty-hint">Писатель не написал ни одной книгой</p>
                     <div th:unless="${writer.getBooks().isEmpty()}"
                          th:each="book : ${writer.getBooks()}"
                          class="info__field ">
