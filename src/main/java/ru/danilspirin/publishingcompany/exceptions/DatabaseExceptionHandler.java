@@ -34,7 +34,14 @@ class DatabaseExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     @ExceptionHandler(PassportDataNonUniqueException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    String PassportDataNonUniquehandler(PassportDataNonUniqueException ex){
+    String PassportDataNonUniqueHandler(PassportDataNonUniqueException ex){
+        return ex.getMessage();
+    }
+
+    @ResponseBody
+    @ExceptionHandler(IsbnNonUniqueException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    String IsbnNonUniqueHandler(IsbnNonUniqueException ex){
         return ex.getMessage();
     }
 }
