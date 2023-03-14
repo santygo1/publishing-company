@@ -37,7 +37,7 @@ public class Writer {
     @Column(name = "phone_number")
     String phoneNumber;
 
-    @ManyToMany(mappedBy = "writers")
+    @ManyToMany(mappedBy = "writers", fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     Set<Book> books;
 }
 
