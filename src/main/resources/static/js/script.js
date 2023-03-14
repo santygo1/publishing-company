@@ -25,9 +25,9 @@ function updateAbsoluteFee(){
     let sellingPriceField = document.getElementById('sellingPrice');
     let absoluteFeeField = document.getElementById('absoluteFee');
 
-    if (sellingPriceField.value !== '0' &&
-        costPriceField.value !== '0' &&
-        circulationField.value !== '0')
+    if (!fieldIsEmpty(sellingPriceField) &&
+        !fieldIsEmpty(costPriceField) &&
+        !fieldIsEmpty(circulationField))
     {
         let absoluteFee = (parseInt(sellingPriceField.value) - parseInt(costPriceField.value)) * parseInt(circulationField.value);
         console.log()
@@ -36,4 +36,7 @@ function updateAbsoluteFee(){
                 '' + Math.round(absoluteFee/1000)) ;
         }
     }
+}
+function fieldIsEmpty(field){
+    return field.value.length === 0 || field.value === '0';
 }
