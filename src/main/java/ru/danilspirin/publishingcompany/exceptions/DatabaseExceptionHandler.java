@@ -27,21 +27,27 @@ class DatabaseExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     @ExceptionHandler(EntityAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    String EntityAlreadyExistsHandler(EntityAlreadyExistsException ex){
+    String entityAlreadyExistsHandler(EntityAlreadyExistsException ex){
         return ex.getMessage();
     }
 
     @ResponseBody
     @ExceptionHandler(PassportDataNonUniqueException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    String PassportDataNonUniqueHandler(PassportDataNonUniqueException ex){
+    String passportDataNonUniqueHandler(PassportDataNonUniqueException ex){
         return ex.getMessage();
     }
 
     @ResponseBody
     @ExceptionHandler(IsbnNonUniqueException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    String IsbnNonUniqueHandler(IsbnNonUniqueException ex){
+    String isbnNonUniqueHandler(IsbnNonUniqueException ex){
+        return ex.getMessage();
+    }
+
+    @ResponseBody
+    @ExceptionHandler(ContractNumberNonUniqueException.class)
+    String contractNumberNonUniqueHandler(ContractNumberNonUniqueException ex){
         return ex.getMessage();
     }
 }
