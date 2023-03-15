@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Книга</title>
   <link rel="stylesheet" href="/styles.css" type="text/css">
+  <link rel="stylesheet" href="/orders.css" type="text/css">
 </head>
 <body>
 <form id="book-form" th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}" hidden></form>
@@ -48,17 +49,24 @@
     <hr>
 
     <p th:if="${orders.isEmpty()}" class="empty-hint">На данную книгу нет заказов</p>
-    <table th:unless="${orders.isEmpty()}">
+    <table class="orders-table" th:unless="${orders.isEmpty()}">
       <thead>
-      <th>Заказчик</th>
-      <th>Количество экземпляров</th>
-      <th>Дата поступления</th>
-      <th>Дата завершения</th>
-      <th></th>
+      <tr class="head">
+        <th>Номер заказа</th>
+        <th>Заказчик</th>
+        <th>Количество экземпляров</th>
+        <th>Дата поступления</th>
+        <th>Дата завершения</th>
+        <th></th>
+      </tr>
       </thead>
       <tbody>
-      <tr th:each="order : ${orders}">
-        <td><a th:text="${order.getCustomer().getId()}"></a></td>
+      <tr class="stroke" th:each="order : ${orders}">
+        <td><a th:text="${order.getOrderNumber()}"/></td>
+        <td><a th:if="${order.getCustomer() != null}"
+               th:text="${order.getCustomer().getId()}"
+               th:href="@{/customers/{id}(id=${order.getCustomer().getId()})}"/>
+        </td>
         <td th:text="${order.getBooksCount()}"/>
         <td th:text="${order.getCreateDate()}"/>
         <td th:text="${order.getFinishDate()}"/>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Книги | «Печать»</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+</head>
+<body>
+<main class="content">
+    <div class="orders-table">
+        <div class="table-wrapper">
+            <a th:href="@{/orders/create}" class="button button-add">
+                <p>Добавить</p><img src="/icon/ic_add.svg"/>
+            </a>
+            <table class="table">
+                <thead>
+                <th>Номер</th>
+                <th>Дата поступления</th>
+                <th>Дата выполнения</th>
+                <th>Количество экземпляров</th>
+                <th>Книга</th>
+                <th>Заказчик</th>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orders}">
+                    <td>
+                        <a th:text="${order.getOrderNumber()}"
+                           th:href="@{/orders/{id}(id=${order.getId()})}"></a>
+                    </td>
+
+                    <td th:text="${#temporals.format(order.getCreateDate(), 'dd.MM.yyyy')}"/>
+                    <td th:text="${#temporals.format(order.getFinishDate(), 'dd.MM.yyyy')}"/>
+
+                    <td th:text="${order.getBooksCount()}"/>
+
+                    <td><a th:if="${order.getBook() != null}"
+                           th:href="@{/books/{id}(id=${order.getBook().getId()})}"
+                           th:text="${order.getBook().getTitle()}"/>
+                    </td>
+                    <td><a th:if="${order.getCustomer() != null}"
+                           th:href="@{/customers/{id}(id=${order.getCustomer().getId()})}"
+                           th:text="${order.getCustomer().getCompany()}"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="empty-hint" th:if="${orders.isEmpty()}">Данные о книгах отсутствуют</p>
+        </div>
+    </div>
+</main>
+</body>
+</html>

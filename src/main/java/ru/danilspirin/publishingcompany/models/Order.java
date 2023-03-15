@@ -17,11 +17,14 @@ public class Order {
     @Id
     String id = UUID.randomUUID().toString();
 
+    @Column(name = "order_number")
+    String orderNumber;
+
     @ManyToOne()
     @JoinColumn(name = "book_id")
     Book book;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "customer_id", nullable = false)
     Customer customer;
 

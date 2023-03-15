@@ -3,6 +3,7 @@ package ru.danilspirin.publishingcompany.service;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.danilspirin.publishingcompany.exceptions.EntityWithIdIsNotExistsException;
@@ -12,6 +13,7 @@ import ru.danilspirin.publishingcompany.repository.OrderRepository;
 import java.util.List;
 
 @RequiredArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 @Service
 public class OrderService {
     

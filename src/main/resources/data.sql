@@ -11,10 +11,17 @@ VALUES
 
 INSERT INTO books(id, isbn, title, circulation, issue_date, cost_price, selling_price, absolute_fee)
 VALUES
-    ('222', '222-3212-2123', 'book2', 21, '2002-02-20', 200, 400, 500),
+    ('book-id-222', '222-3212-2123', 'book2', 21, '2002-02-20', 200, 400, 500),
     ('111', '111-99-2123', 'book1', 21, '2002-02-20', 200, 400, 500),
     ('333', '222-77-2123', 'book2', 21, '2002-02-20', 200, 400, 500),
     ('444', '222-12-2123', 'book2', 21, '2002-02-20', 200, 400, 500),
     ('555', '222-3-2123', 'book2', 21, '2002-02-20', 200, 400, 500),
     ('666', '3-3212-2123', 'book2', 21, '2002-02-20', 200, 400, 500),
     ('777', '12-3212-2123', 'book2', 21, '2002-02-20', 200, 400, 500);
+
+INSERT INTO customers(id, company, company_address, phone_number, surname, name, patronymic)
+VALUES ('customer-id-1', 'company', 'company_address', 'phone_number', 'surname', 'name', 'patronymic');
+
+INSERT INTO orders(id, book_id, customer_id, order_number, create_date, finish_date, books_count)
+VALUES
+    ('order-id-1', 'book-id-222', 'customer-id-1', '№123', '2002-02-20','2002-02-21',70);

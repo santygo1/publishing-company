@@ -3,6 +3,8 @@ DROP TABLE contracts CASCADE;
 DROP TABLE writers CASCADE;
 DROP TABLE books CASCADE;
 DROP TABLE  writers_books CASCADE;
+DROP TABLE orders CASCADE;
+DROP TABLE customers CASCADE;
 
 CREATE TABLE IF NOT EXISTS writers(
     id VARCHAR PRIMARY KEY,
@@ -43,8 +45,8 @@ CREATE TABLE IF NOT EXISTS books(
 );
 
 CREATE TABLE IF NOT EXISTS writers_books(
-    writer_id VARCHAR REFERENCES writers(id) ON DELETE CASCADE,
-    book_id VARCHAR REFERENCES books(id) ON DELETE CASCADE,
+    writer_id VARCHAR REFERENCES writers(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    book_id VARCHAR REFERENCES books(id) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (writer_id, book_id)
 );
 
@@ -60,8 +62,9 @@ CREATE TABLE IF NOT EXISTS customers(
 
 CREATE TABLE IF NOT EXISTS orders(
     id VARCHAR PRIMARY KEY,
-    book_id VARCHAR REFERENCES books(id),
-    customer_id VARCHAR REFERENCES customers(id),
+    book_id VARCHAR REFERENCES books(id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
+    customer_id VARCHAR REFERENCES customers(id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
+    order_number VARCHAR NOT NULL,
     create_date DATE NOT NULL,
     finish_date DATE NULL CONSTRAINT must_be_bigger_then_create_date CHECK ( finish_date > orders.create_date ),
     books_count INTEGER NOT NULL CONSTRAINT must_be_positive CHECK ( books_count > 0 )
