@@ -27,13 +27,13 @@ public class OrderController {
     BookService bookService;
 
     @GetMapping()
-    public String showAll(Model model){
+    public String showAllOrders(Model model){
         model.addAttribute("orders", orderService.getAll());
         return "orders-view/orders";
     }
 
     @GetMapping("/{id}")
-    public String showContract(@PathVariable String id, Model model){
+    public String showOrder(@PathVariable String id, Model model){
         model.addAttribute("order", orderService.getOrder(id));
         return "orders-view/order";
     }
@@ -74,9 +74,19 @@ public class OrderController {
         return "redirect:/orders/" + created.getId();
     }
 
-    @GetMapping("/error")
-    public String serviceError(){
-        return "errors/order-service-error";
+    @GetMapping("/edit/{id}")
+    public String showEditOrderForm(@PathVariable String id, Model model){
+        Order updated = orderService.getOrder(id);
+        model.addAttribute("order", updated);
+        return "orders-view/order_edit";
+    }
+    @PatchMapping("/{id}")
+    public String editOrder(
+            @PathVariable String id,
+            @ModelAttribute("order") Order update){
+
+        Order updated = orderService.changeOrderInfo(id, update);
+        return "redirect:/orders/" + updated.getId();
     }
 
     @DeleteMapping("/{id}")

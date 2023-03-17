@@ -62,7 +62,7 @@ public class WriterController {
     }
 
     @GetMapping("/{id}/edit")
-    public String showEditForm(@PathVariable String id, Model model) {
+    public String showEditWriterForm(@PathVariable String id, Model model) {
         Writer writer = writerService.getWriter(id);
         model.addAttribute("writer", writer);
 

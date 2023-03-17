@@ -19,13 +19,13 @@ public class ContractController {
     ContractService contractService;
 
     @GetMapping
-    public String showAll(Model contracts){
+    public String showAllContracts(Model contracts){
         contracts.addAttribute("contracts", contractService.getAllContracts());
         return "contracts-view/contracts";
     }
 
     @GetMapping("/{id}")
-    public String showContractInfo(
+    public String showContract(
             @PathVariable String id,
             Model model){
         Contract contract = contractService.getContract(id);
@@ -34,7 +34,7 @@ public class ContractController {
     }
 
     @GetMapping("/{id}/edit")
-    public String showEditForm(
+    public String showEditContractForm(
             @PathVariable String id,
             Model model){
         Contract contract = contractService.getContract(id);
@@ -43,7 +43,7 @@ public class ContractController {
     }
 
     @PatchMapping("/{id}")
-    public String replaceContract(@PathVariable String id,
+    public String editContract(@PathVariable String id,
                                   @ModelAttribute Contract contract)
     {
         Contract replaced = contractService.changeContractInfo(id, contract);

@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS orders(
     id VARCHAR PRIMARY KEY,
     book_id VARCHAR REFERENCES books(id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
     customer_id VARCHAR REFERENCES customers(id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
-    order_number VARCHAR NOT NULL,
+    order_number VARCHAR UNIQUE NOT NULL,
     create_date DATE NOT NULL,
     finish_date DATE NULL CONSTRAINT must_be_bigger_then_create_date CHECK ( finish_date > orders.create_date ),
     books_count INTEGER NOT NULL CONSTRAINT must_be_positive CHECK ( books_count > 0 )

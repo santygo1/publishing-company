@@ -25,7 +25,7 @@ public class BookController {
     WriterService writerService;
 
     @GetMapping
-    public String showAllContracts(Model model) {
+    public String showAllBooks(Model model) {
         model.addAttribute("books", bookService.getAll());
         return "books-view/books";
     }
@@ -43,7 +43,7 @@ public class BookController {
     }
 
     @GetMapping("/create")
-    public String showCreateForm(Model model) {
+    public String showCreateBookForm(Model model) {
         model.addAttribute("book", new Book());
         return "books-view/book_create";
     }
@@ -55,7 +55,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}/edit")
-    public String showEditForm(@PathVariable String id, Model model) {
+    public String showEditBookForm(@PathVariable String id, Model model) {
         model.addAttribute("book", bookService.getBook(id));
         return "books-view/book_edit";
     }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактирование заказа</title>
+  <link rel="stylesheet" href="/styles.css" type="text/css">
+</head>
+<body>
+<main class="content">
+  <section class="form">
+    <a class="button-close" th:href="@{/orders}"></a>
+
+    <form class="create-form"
+          th:method="PATCH"
+          th:action="@{/order/{id}(id=${order.getId()})}"
+          data-th-object="${order}">
+
+      <div class="wrapper">
+        <h3 class="subfield__title">Редактирование заказа</h3>
+        <div class="form__fields">
+          <label for="orderNumber">Номер заказа:</label>
+          <input id="orderNumber" type="text" th:field="*{orderNumber}"/>
+
+          <label for="createDate">Дата создания:</label>
+          <input id="createDate" type="date" onchange="setMinFinishDate()"
+                 th:field="*{createDate}"/>
+
+          <label for="finishDate">Дата завершения:</label>
+          <input id="finishDate" type="date" th:field="*{finishDate}"/>
+
+          <h3 class="subfield__title">Книга</h3>
+
+      </div>
+
+      <div class="button-container">
+        <input class="button" type="submit" value="Изменить">
+        <a class="button" th:text="Отмена" th:href="@{/orders/{id}(id=${order.getId()})}"/>
+      </div>
+    </form>
+
+    <script src="/js/script.js"></script>
+  </section>
+</main>
+</body>
+</html>
