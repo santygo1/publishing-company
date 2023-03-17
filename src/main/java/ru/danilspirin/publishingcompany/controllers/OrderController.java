@@ -78,4 +78,10 @@ public class OrderController {
     public String serviceError(){
         return "errors/order-service-error";
     }
+
+    @DeleteMapping("/{id}")
+    public String deleteOrder(@PathVariable String id){
+        orderService.deleteOrder(id);
+        return "redirect:/orders";
+    }
 }
