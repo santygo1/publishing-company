@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация заказа</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+    <link rel="stylesheet" href="/orders.css" type="text/css">
+</head>
+<body>
+<main class="content">
+    <section class="form">
+        <a class="button-close" th:href="@{/orders}"></a>
+
+        <form class="create-form"
+              th:method="POST"
+              th:action="@{/orders}"
+              data-th-object="${order}">
+
+            <div class="wrapper order-wrapper">
+                <div class="wrapper">
+                    <h3 class="subfield__title">Данные заказа</h3>
+                    <div th:class="form__fields">
+                        <label for="orderNumber">Номер заказа:</label>
+                        <input id="orderNumber" type="text"th:field="*{orderNumber}" />
+
+                        <label for="createDate">Дата создания:</label>
+                        <input id="createDate" type="date" onchange="setMinFinishDate()"  th:field="*{createDate}"/>
+
+                        <label for="finishDate">Дата завершения:</label>
+                        <input id="finishDate" type="date" th:field="*{createDate}"/>
+                    </div>
+                </div>
+
+                <div class="wrapper">
+                    <h3 class="subfield__title">Заказчик</h3>
+                    <div class="emerging order-field order-row-field" id="choose-customer-form">
+                        <select name="selectedCustomerId">
+                            <option id="defaultSelectCustomer" value="" selected>Выбрать заказчика</option>
+                            <option th:each="customer : ${customers}" th:value="${customer.getId()}"
+                                    th:text="${customer.getCompany()} + ' - ' + 'Представитель: '+ ${customer.getOwnerFullName().initials()}"/>
+                        </select>
+                        <p class="or">Или</p>
+                        <a class="button" onclick="showCreateCustomerForm()">Зарегистрировать заказчика</a>
+                    </div>
+                    <div class="emerging order-field" id="create-customer-form" style="display: none;">
+                        <div class="form__fields" th:with="customer=${order.getCustomer()}">
+                            <label for="company">Компания:</label>
+                            <input id="company" type="text" th:field="*{customer.company}">
+
+                            <label for="surname">Фамилия:</label>
+                            <input id="surname" type="text" th:field="*{customer.ownerFullName.surname}"/>
+
+                            <label for="name">Имя:</label>
+                            <input id="name" type="text" th:field="*{customer.ownerFullName.name}"/>
+
+                            <label for="patronymic">Отчество:</label>
+                            <input id="patronymic" type="text" th:field="*{customer.ownerFullName.patronymic}"/>
+
+                            <label for="address">Адрес:</label>
+                            <input id="address" type="text" th:field="*{customer.address}"/>
+
+                            <label for="phoneNumber">Номер телефона:</label>
+                            <input id="phoneNumber" type="text" th:field="*{customer.phoneNumber}"/>
+                        </div>
+                        <a class="button" onclick="showChooseCustomerForm()">Выбрать из списка...</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wrapper">
+                <h3 class="subfield__title">Книга</h3>
+                <select name="selectedBookId">
+                    <option value="" selected>Выбрать книгу</option>
+                    <option th:each="book : ${books}" th:value="${book.getId()}"
+                            th:text="${book.getTitle()} + ' - ' + 'ISBN: '+ ${book.getISBN()}"/>
+                </select></br>
+                <div class="form__fields">
+                    <label for="booksCount">Количество: книг</label>
+                    <input id="booksCount" type="number" min="1" th:field="*{booksCount}">
+                </div>
+            </div>
+
+            <div class="button-container">
+                <input class="button" type="submit" value="Добавить">
+                <a class="button" th:text="Отмена" th:href="@{/orders}"/>
+            </div>
+        </form>
+        <script src="/js/script.js"></script>
+    </section>
+</main>
+</body>
+</html>

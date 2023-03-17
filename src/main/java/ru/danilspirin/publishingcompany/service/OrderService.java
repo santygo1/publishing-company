@@ -17,29 +17,30 @@ import java.util.List;
 @Service
 public class OrderService {
     
-    OrderRepository repository;
+    OrderRepository orderRepository;
 
     @Transactional
-    public void create(Order order){
-        repository.save(order);
+    public Order addOrder(Order order){
+        orderRepository.findById(order.getId())
+                        .ifPresent(orderDB -> {
+                            throw new EntityWithIdIsNotExistsException(order.getId(), Order.class);
+                        });
+        return orderRepository.save(order);
     }
 
     public List<Order> getAll(){
-        return repository.findAll();
+        return orderRepository.findAll();
     }
 
-    public Order getById(String id){
-        return repository.findById(id)
-                .orElseThrow(() -> new EntityWithIdIsNotExistsException(id, Order.class));
-    }
-
-    @Transactional
-    public void update(Order update){
-        repository.save(update);
+    public Order getOrder(String id){
+        return orderRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityWithIdIsNotExistsException(id, Order.class)
+                );
     }
 
     @Transactional
-    public void delete(String id){
-        repository.deleteById(id);
+    public void deleteOrder(String id){
+        orderRepository.deleteById(id);
     }
 }

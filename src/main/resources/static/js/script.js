@@ -40,3 +40,31 @@ function updateAbsoluteFee(){
 function fieldIsEmpty(field){
     return field.value.length === 0 || field.value === '0';
 }
+
+/* Скрипт для сокрытия формы выбора заказчика
+    и отображения формы его создания*/
+function showCreateCustomerForm(){
+    document.getElementById("choose-customer-form").style.display = "none";
+    document.getElementById("create-customer-form").style.display = "flex";
+    document.getElementById('defaultSelectCustomer').selected = true;
+}
+/* Скрипт для сокрытия формы создания заказчика
+*  и отображение формы его выбора из предложенных*/
+function showChooseCustomerForm(){
+    document.getElementById("choose-customer-form").style.display = "flex";
+    document.getElementById("create-customer-form").style.display = "none";
+    document.getElementById('company').value = '';
+    document.getElementById('surname').value = '' ;
+    document.getElementById('name').value = '' ;
+    document.getElementById('patronymic').value = '' ;
+    document.getElementById('address').value = '' ;
+    document.getElementById('phoneNumber').value = '' ;
+}
+
+/* Скрипт, устанавливает минимальную дату для даты завершения заказа */
+function setMinFinishDate(){
+    let min = document.getElementById('createDate').value;
+    let finishDate = document.getElementById('finishDate');
+    finishDate.setAttribute('min', min)
+    finishDate.value='';
+}

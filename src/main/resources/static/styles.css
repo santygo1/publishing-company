@@ -32,11 +32,13 @@ input[type="submit"],
 }
 input[type="submit"]:hover,
 .button:hover{
-    background: rgba(0, 0, 0, 0.1);
+    background: #6c5ce7;
+    border-color: transparent;
+    color: white;
 }
 input[type="submit"]:active,
 .button:active{
-    background: rgba(0, 0, 0, 0.05);
+    background: #a69fe1;
 }
 
 input[type="text"],
@@ -268,7 +270,7 @@ table.table td{
     gap: 10px;
     align-items: center;
 }
-.select-card-form select{
+select{
     outline: none;
     border-radius: 4px;
     border: 0.5px solid #c5c5c5;
@@ -278,11 +280,11 @@ table.table td{
     transition: all .3s ease;
     padding: 4px 10px;
 }
-.select-card-form select:hover{
+select:hover{
     color:black;
     border-color: black;
 }
-.select-card-form select:focus{
+select:focus{
     border-color: #6c5ce7;
 }
 .input-with-hint-wrapper{
@@ -293,5 +295,17 @@ table.table td{
     white-space: nowrap;
     color: #c5c5c5;
 }
-
+.error-content{
+    height: 80vh;
+    justify-content: center;
+    align-items: center;
+}
+.error-content .error-text p{
+    color: #333333;
+    font-family: 'Roboto Medium',sans-serif;
+}
+.vaultboy{
+    width: 150px;
+    height: 150px;
+}
 

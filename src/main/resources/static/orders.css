@@ -12,3 +12,23 @@ table.orders-table .stroke td{
     border-top: 0.5px solid #c5c5c5;
     border-bottom: 0.5px solid #c5c5c5;
 }
+.wrapper .subfield__title{
+    margin-bottom: 10px;
+}
+.order-field{
+    display: inline-flex;
+    align-items: start;
+    flex-direction: column;
+    gap:20px;
+}
+.order-field .or{
+    align-self: center;
+}
+.order-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.order-row-field{
+    flex-direction: row;
+}

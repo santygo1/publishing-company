@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Книга</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+    <link rel="stylesheet" href="/orders.css" type="text/css">
+</head>
+<body>
+<form id="order-form" th:method="DELETE" th:action="@{/orders/{id}(id=${order.getId()})}" hidden></form>
+<main class="content" >
+    <section class="info order__info">
+        <h2 class="info__title">Заказ</h2>
+        <hr>
+
+        <div class="info__field">
+            <div class="properties">
+                <p class="hint">ID</p><p th:text="${order.getId()}"></p>
+
+                <p class="hint">Дата поступления</p><p
+                    th:text="${#temporals.format(order.getCreateDate(),'dd.MM.yyyy')}"/>
+
+                <p class="hint">Дата выполнения</p><p
+                    th:text="${#temporals.format(order.getFinishDate())}"/>
+            </div>
+        </div>
+
+        <div class="info__field">
+            <p class="title">Книга</p>
+            <table class="orders-table">
+                <thead>
+                    <tr class="head">
+                        <th>ISBN-книги</th>
+                        <th>Количество экземпляров</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr class="stroke" th:with="book=${order.getBook()}">
+                    <td th:text="${book.getISBN()}"/>
+                    <td th:text="${order.getBooksCount()}"/>
+                    <td><a class="button" th:href="@{/books/{id}(id=${book.getId()})}">Перейти</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info__buttons">
+            <a class="button" th:href="@{/orders/{id}/edit(id=${order.getId()})}">Изменить</a>
+            <input form="order-form" type="submit" value="Удалить">
+        </div>
+    </section>
+
+    <section class="info" th:with="customer=${order.getCustomer()}">
+        <h2 class="info__title">Заказчик</h2>
+        <hr/>
+        <div class="info__field">
+            <div class="properties">
+                <p class="hint">ID</p><p th:text="${customer.getId()}"></p>
+            </div>
+        </div>
+        <div class="info__field">
+            <div class="properties">
+                <p class="hint"></p>Название<p th:text="${customer.getCompany()}"></p>
+                <p class="hint"></p>Представитель<p th:text="${customer.getOwnerFullName().initials()}"></p>
+                <p class="hint"></p>Адрес<p th:text="${customer.getAddress()}"></p>
+                <p class="hint"></p>Телефон<p th:text="${customer.getPhoneNumber()}"></p>
+            </div>
+        </div>
+
+        <a class="go-to-link" th:href="@{/customers/{id}(id=${customer.getId()})}">Перейти</a>
+    </section>
+</main>
+</body>
+</html>

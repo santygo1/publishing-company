@@ -9,7 +9,8 @@ import ru.danilspirin.publishingcompany.exceptions.EntityWithIdIsNotExistsExcept
 import ru.danilspirin.publishingcompany.models.Customer;
 import ru.danilspirin.publishingcompany.repository.CustomerRepository;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @RequiredArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
@@ -22,11 +23,11 @@ public class CustomerService {
         repository.save(customer);
     }
 
-    public List<Customer> getAll(){
-        return repository.findAll();
+    public Set<Customer> getAll(){
+        return new HashSet<>(repository.findAll());
     }
 
-    public Customer getById(String id){
+    public Customer getCustomer(String id){
         return repository.findById(id)
                 .orElseThrow(() -> new EntityWithIdIsNotExistsException(id, Customer.class));
     }

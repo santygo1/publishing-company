@@ -21,7 +21,7 @@ public class Order {
     String orderNumber;
 
     @ManyToOne()
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id", nullable = false)
     Book book;
 
     @ManyToOne()

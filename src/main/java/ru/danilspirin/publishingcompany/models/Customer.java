@@ -28,7 +28,10 @@ public class Customer {
 
     @Valid
     @Embedded
-    FullName fullName;
+    FullName ownerFullName;
+
+    @Column(name = "phone_number")
+    String phoneNumber;
 
     @OneToMany(mappedBy = "customer")
     List<Order> orders;
