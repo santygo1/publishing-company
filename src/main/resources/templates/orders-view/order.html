@@ -21,7 +21,7 @@
                     th:text="${#temporals.format(order.getCreateDate(),'dd.MM.yyyy')}"/>
 
                 <p class="hint">Дата выполнения</p><p
-                    th:text="${#temporals.format(order.getFinishDate())}"/>
+                    th:text="${#temporals.format(order.getFinishDate(), 'dd.MM.yyyy')}"/>
             </div>
         </div>
 
@@ -61,10 +61,10 @@
         </div>
         <div class="info__field">
             <div class="properties">
-                <p class="hint"></p>Название<p th:text="${customer.getCompany()}"></p>
-                <p class="hint"></p>Представитель<p th:text="${customer.getOwnerFullName().initials()}"></p>
-                <p class="hint"></p>Адрес<p th:text="${customer.getAddress()}"></p>
-                <p class="hint"></p>Телефон<p th:text="${customer.getPhoneNumber()}"></p>
+                <p class="hint">Название</p><p th:text="${customer.getCompany()}"></p>
+                <p class="hint">Представитель</p><p th:text="${customer.getOwnerFullName().initials()}"></p>
+                <p class="hint">Адрес</p><p th:text="${customer.getAddress()}"></p>
+                <p class="hint">Телефон</p><p th:text="${customer.getPhoneNumber()}"></p>
             </div>
         </div>
 
