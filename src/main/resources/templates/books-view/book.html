@@ -64,7 +64,7 @@
       <tr class="stroke" th:each="order : ${orders}">
         <td><a th:text="${order.getOrderNumber()}"/></td>
         <td><a th:if="${order.getCustomer() != null}"
-               th:text="${order.getCustomer().getId()}"
+               th:text="${order.getCustomer().getCompany()}"
                th:href="@{/customers/{id}(id=${order.getCustomer().getId()})}"/>
         </td>
         <td th:text="${order.getBooksCount()}"/>

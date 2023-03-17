@@ -60,7 +60,7 @@
 
             <div class="button-container">
                 <input class="button" type="submit" value="Изменить">
-                <a class="button" th:text="Отмена" th:href="@{/books}"/>
+                <a class="button" th:text="Отмена" th:href="@{/books/{id}(id=${book.getId()})}"/>
             </div>
         </form>
 
