@@ -10,11 +10,14 @@ import ru.danilspirin.publishingcompany.exceptions.EntityAlreadyExistsException;
 import ru.danilspirin.publishingcompany.exceptions.EntityWithIdIsNotExistsException;
 import ru.danilspirin.publishingcompany.exceptions.IsbnNonUniqueException;
 import ru.danilspirin.publishingcompany.models.Book;
+import ru.danilspirin.publishingcompany.models.Customer;
+import ru.danilspirin.publishingcompany.models.Order;
 import ru.danilspirin.publishingcompany.models.Writer;
 import ru.danilspirin.publishingcompany.repository.BookRepository;
 import ru.danilspirin.publishingcompany.repository.WriterRepository;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -25,6 +28,8 @@ public class BookService {
 
     BookRepository bookRepository;
     WriterRepository writerRepository;
+
+    CustomerService customerService;
 
     @Transactional
     public Book addBook(Book book) throws IsbnNonUniqueException {
@@ -51,14 +56,14 @@ public class BookService {
 
     @Transactional
     public Book changeBookInfo(String id, Book update) {
-        Book updatedBook =  bookRepository.findById(id)
+        Book updatedBook = bookRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Book.class)
                 );
 
         bookRepository.findByISBN(update.getISBN())
-                .ifPresent( bookDB -> {
-                    if (!bookDB.getId().equals(updatedBook.getId())){
+                .ifPresent(bookDB -> {
+                    if (!bookDB.getId().equals(updatedBook.getId())) {
                         throw new IsbnNonUniqueException();
                     }
                 });
@@ -76,7 +81,29 @@ public class BookService {
 
     @Transactional
     public void deleteBook(String id) {
+        checkRelationDeletedOrdersForWritersOnEmptyByBookId(id);
         bookRepository.deleteById(id);
+    }
+
+    /**
+     * При удалении книги проверяет и удаляет все зависимые заказы и удаляет заказчиков,
+     * где один из удаляемых заказов является последним.
+     * (Не лучшее решение писать эту логику здесь т.к нарушает SLR, но дедлайны ебут)
+     *
+     * @param bookId id удаляемой книги
+     */
+    private void checkRelationDeletedOrdersForWritersOnEmptyByBookId(String bookId) {
+        bookRepository.findById(bookId)
+                .ifPresent(deleteBook -> {
+            List<Order> relationOrders =  deleteBook.getOrders();
+            relationOrders.forEach(order -> {
+                Customer customer = order.getCustomer();
+                // т.е если мы удаляем последний заказ заказчика
+                if (customer != null && customer.getOrders().size() == 1){
+                    customerService.deleteCustomer(customer.getId());
+                }
+            });
+        });
     }
 
     @Transactional

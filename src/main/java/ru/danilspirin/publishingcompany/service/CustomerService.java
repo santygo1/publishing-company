@@ -51,6 +51,12 @@ public class CustomerService {
     }
 
     @Transactional
+    public void deleteIfHasNotOrders(Customer customer){
+        if (customer.getOrders().isEmpty()){
+            customerRepository.delete(customer);
+        }
+    }
+    @Transactional
     public void deleteCustomer(String id){
         customerRepository.deleteById(id);
     }
