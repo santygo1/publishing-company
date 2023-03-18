@@ -5,14 +5,14 @@
   <title>Редактирование заказа</title>
   <link rel="stylesheet" href="/styles.css" type="text/css">
 </head>
-<body>
+<body onload="setMinFinishDate()">
 <main class="content">
   <section class="form">
     <a class="button-close" th:href="@{/orders}"></a>
 
     <form class="create-form"
           th:method="PATCH"
-          th:action="@{/order/{id}(id=${order.getId()})}"
+          th:action="@{/orders/{id}(id=${order.getId()})}"
           data-th-object="${order}">
 
       <div class="wrapper">
@@ -28,13 +28,17 @@
           <label for="finishDate">Дата завершения:</label>
           <input id="finishDate" type="date" th:field="*{finishDate}"/>
 
-          <h3 class="subfield__title">Книга</h3>
+          <h3 class="book__title">Книга</h3><p></p>
+          <p>ISBN книги:</p><a th:text="${order.getBook().getISBN()}"/>
 
+          <label for="booksCount">Количество экземпляров</label>
+          <input id="booksCount" type="number" min="1" th:field="*{booksCount}">
       </div>
 
       <div class="button-container">
         <input class="button" type="submit" value="Изменить">
         <a class="button" th:text="Отмена" th:href="@{/orders/{id}(id=${order.getId()})}"/>
+      </div>
       </div>
     </form>
 

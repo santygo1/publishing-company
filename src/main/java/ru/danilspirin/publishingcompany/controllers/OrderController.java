@@ -41,6 +41,7 @@ public class OrderController {
     @GetMapping("/create")
     public String showCreateNewOrderWithRelatedCustomerForm(Model model){
         Order order = new Order();
+        order.setCustomer(new Customer());
         model.addAttribute("order", order);
 
         Set<Book> existedBooks = bookService.getAll();
@@ -62,19 +63,24 @@ public class OrderController {
             @RequestParam("selectedCustomerId") String selectedCustomerId,
             @RequestParam("selectedBookId") String selectedBookId
     ){
+        Customer customer;
         if (!selectedCustomerId.equals("")){
-            order.setCustomer(customerService.getCustomer(selectedCustomerId));
+            // Заказчик был выбран из списка заказчиков
+            customer = customerService.getCustomer(selectedCustomerId);
+        }else {
+            // Заказчик был создан
+            customer = customerService.create(order.getCustomer());
         }
+        order.setCustomer(customer);
 
         //TODO: Обработка exeption
         order.setBook(bookService.getBook(selectedBookId));
 
         Order created = orderService.addOrder(order);
-
         return "redirect:/orders/" + created.getId();
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/{id}/edit")
     public String showEditOrderForm(@PathVariable String id, Model model){
         Order updated = orderService.getOrder(id);
         model.addAttribute("order", updated);

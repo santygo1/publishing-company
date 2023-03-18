@@ -65,6 +65,8 @@ function showChooseCustomerForm(){
 function setMinFinishDate(){
     let min = document.getElementById('createDate').value;
     let finishDate = document.getElementById('finishDate');
-    finishDate.setAttribute('min', min)
-    finishDate.value='';
+    if (finishDate.value < min){
+        finishDate.value = min;
+    }
+    finishDate.setAttribute('min', min);
 }

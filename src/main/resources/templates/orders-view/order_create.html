@@ -47,6 +47,10 @@
                             <label for="company">Компания:</label>
                             <input id="company" type="text" th:field="*{customer.company}">
 
+                            <label for="address">Адрес:</label>
+                            <input id="address" type="text" th:field="*{customer.address}"/>
+
+                            <p style="font-weight: bold; margin-top: 20px;">Представитель</p><p></p>
                             <label for="surname">Фамилия:</label>
                             <input id="surname" type="text" th:field="*{customer.ownerFullName.surname}"/>
 
@@ -55,9 +59,6 @@
 
                             <label for="patronymic">Отчество:</label>
                             <input id="patronymic" type="text" th:field="*{customer.ownerFullName.patronymic}"/>
-
-                            <label for="address">Адрес:</label>
-                            <input id="address" type="text" th:field="*{customer.address}"/>
 
                             <label for="phoneNumber">Номер телефона:</label>
                             <input id="phoneNumber" type="text" th:field="*{customer.phoneNumber}"/>
@@ -76,7 +77,7 @@
                 </select></br>
                 <div class="form__fields">
                     <label for="booksCount">Количество: книг</label>
-                    <input id="booksCount" type="number" min="1" th:field="*{booksCount}">
+                    <input id="booksCount" type="number" min="1" value="1" th:field="*{booksCount}">
                 </div>
             </div>
 

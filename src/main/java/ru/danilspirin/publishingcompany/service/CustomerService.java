@@ -19,8 +19,8 @@ public class CustomerService {
     CustomerRepository repository;
 
     @Transactional
-    public void create(Customer customer){
-        repository.save(customer);
+    public Customer create(Customer customer){
+        return repository.save(customer);
     }
 
     public Set<Customer> getAll(){

@@ -17,6 +17,8 @@
             <div class="properties">
                 <p class="hint">ID</p><p th:text="${order.getId()}"></p>
 
+                <p class="hint">Номер заказа</p><p th:text="${order.getOrderNumber()}"/>
+
                 <p class="hint">Дата поступления</p><p
                     th:text="${#temporals.format(order.getCreateDate(),'dd.MM.yyyy')}"/>
 

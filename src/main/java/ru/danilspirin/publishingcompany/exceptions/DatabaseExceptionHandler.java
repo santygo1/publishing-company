@@ -47,7 +47,15 @@ class DatabaseExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(ContractNumberNonUniqueException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
     String contractNumberNonUniqueHandler(ContractNumberNonUniqueException ex){
+        return ex.getMessage();
+    }
+
+    @ResponseBody
+    @ExceptionHandler(OrderNumberNonUniqueException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    String orderNumberNonUniqueHandler(OrderNumberNonUniqueException ex){
         return ex.getMessage();
     }
 }

@@ -56,6 +56,7 @@ public class WriterController {
     @PostMapping
     public String createNewWriterAndContract(
             @ModelAttribute Writer writer) {
+
         Writer created = writerService.addWriterWithRelatedContract(writer);
         log.info("Дата : {}", writer.getContract().getFinishDate());
         return "redirect:/writers/" + created.getId();
