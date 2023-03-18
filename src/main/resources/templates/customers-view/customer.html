@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказчик</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+    <link rel="stylesheet" href="/orders.css" type="text/css">
+</head>
+<body>
+<form id="customer-form" th:method="DELETE"
+      th:action="@{/customers/{id}(id=${customer.getId()})}" hidden></form>
+<main class="content" >
+    <section class="info">
+        <h2 class="info__title">Заказчик</h2>
+        <hr>
+        <div class="info__field">
+            <div class="properties">
+                <p class="hint">ID</p><p th:text="${customer.getId()}"></p>
+            </div>
+        </div>
+
+        <div class="info__field">
+            <div class="properties">
+                <p class="hint">Компания</p><p th:text="${customer.getCompany()}"/>
+                <p class="hint">Адрес</p><p th:text="${customer.getAddress()}"/>
+            </div>
+        </div>
+
+        <div class="info__field">
+            <p class="title">Представитель</p>
+            <div class="properties" th:with="fio=${customer.getOwnerFullName()}">
+                <p class="hint">Фамилия</p><p th:text="${fio.getSurname()}"></p>
+                <p class="hint">Имя</p><p th:text="${fio.getName()}"></p>
+                <p class="hint">Отчество</p><p th:text="${fio.getPatronymic()}"></p>
+                <p class="hint">Номер телефона</p><p th:text="${customer.getPhoneNumber()}"></p>
+            </div>
+        </div>
+
+        <div class="info__buttons">
+            <a class="button"
+               th:href="@{/customers/{id}/edit(id=${customer.getId()})}">Изменить</a>
+            <input form="customer-form" type="submit" value="Удалить">
+        </div>
+    </section>
+
+    <section class="info" th:with="orders=${customer.getOrders()}">
+        <h2 class="info__title">Заказы</h2>
+        <hr>
+
+        <p
+           th:if="${orders.isEmpty()}"
+           class="empty-hint">Заказчик еще не делал заказы
+        </p>
+
+        <table class="orders-table" th:unless="${orders.isEmpty()}">
+            <thead>
+            <tr class="head">
+                <th>Номер заказа</th>
+                <th>Количество экземпляров</th>
+                <th>Дата поступления</th>
+                <th>Дата завершения</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="stroke" th:each="order : ${orders}">
+                <td><a th:text="${order.getOrderNumber()}"/></td>
+                <td th:text="${order.getBooksCount()}"/>
+                <td th:text="${order.getCreateDate()}"/>
+                <td th:text="${order.getFinishDate()}"/>
+                <td><a class="button"
+                       th:href="@{/orders/{id}(id=${order.getId()})}">Перейти</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a class="go-to-link" th:href="@{/orders}">Все</a>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказчики | «Печать»</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+</head>
+<body>
+<main class="content">
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Компания</th>
+                <th>Представитель</th>
+                <th>Адрес</th>
+                <th>Номер телефона</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer : ${customers}">
+                <td>
+                    <a th:text="${customer.getCompany()}"
+                       th:href="@{/customers/{id}(id=${customer.getId()})}"></a>
+                </td>
+                <td th:text="${customer.getOwnerFullName().initials()}"></td>
+                <td class="address-cell" th:text="${customer.getAddress()}"></td>
+                <td th:text="${customer.getPhoneNumber()}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="empty-hint" th:if="${customers.isEmpty()}">Данные о заказчиках отсутствуют</p>
+    </div>
+</main>
+</body>
+</html>

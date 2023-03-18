@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование заказчика</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+</head>
+<body>
+<main class="content">
+    <section class="form">
+        <a class="button-close" th:href="@{/customers}"></a>
+
+        <form class="create-form"
+              th:method="PATCH"
+              th:action="@{/customers/{id}(id=${customer.getId()})}"
+              data-th-object="${customer}">
+
+            <div class="wrapper">
+                <h3 class="subfield__title">Редактирование заказчика</h3>
+                <div class="form__fields">
+                    <label for="company">Компания:</label>
+                    <input id="company" type="text" th:field="*{company}"/>
+
+                    <label for="title">Адрес:</label>
+                    <input id="title" type="text" th:field="*{address}"/>
+                </div>
+            </div>
+
+            <div class="wrapper">
+                <h3 class="subfield__title"
+                    style="font-size: 0.8rem">Представитель</h3>
+                <div class="form__fields">
+                    <label for="surname">Фамилия:</label>
+                    <input id="surname"
+                           type="text" th:field="*{ownerFullName.surname}"/>
+
+                    <label for="name">Имя:</label>
+                    <input id="name"
+                           type="text" th:field="*{ownerFullName.name}"/>
+
+                    <label for="patronymic">Отчество:</label>
+                    <input id="patronymic"
+                           type="text" th:field="*{ownerFullName.patronymic}"/>
+
+                    <label for="phoneNumber">Номер телефона:</label>
+                    <input id="phoneNumber"
+                           type="text" th:field="*{phoneNumber}"/>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <input class="button" type="submit" value="Изменить">
+                <a class="button" th:text="Отмена"
+                   th:href="@{/customers/{id}(id=${customer.getId()})}"/>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

@@ -16,29 +16,42 @@ import java.util.Set;
 @Service
 public class CustomerService {
     
-    CustomerRepository repository;
+    CustomerRepository customerRepository;
 
     @Transactional
     public Customer create(Customer customer){
-        return repository.save(customer);
+        return customerRepository.save(customer);
     }
 
     public Set<Customer> getAll(){
-        return new HashSet<>(repository.findAll());
+        return new HashSet<>(customerRepository.findAll());
     }
 
     public Customer getCustomer(String id){
-        return repository.findById(id)
-                .orElseThrow(() -> new EntityWithIdIsNotExistsException(id, Customer.class));
+        return customerRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        new EntityWithIdIsNotExistsException(id, Customer.class)
+                );
     }
 
     @Transactional
-    public void update(Customer update){
-        repository.save(update);
+    public Customer changeCustomerInfo(String id, Customer update){
+        Customer updatedCustomer = customerRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityWithIdIsNotExistsException(id, Customer.class)
+                );
+
+        updatedCustomer.setCompany(update.getCompany());
+        updatedCustomer.setAddress(update.getAddress());
+        updatedCustomer.setPhoneNumber(update.getPhoneNumber());
+        updatedCustomer.setOwnerFullName(update.getOwnerFullName());
+
+        return customerRepository.save(updatedCustomer);
     }
 
     @Transactional
-    public void delete(String id){
-        repository.deleteById(id);
+    public void deleteCustomer(String id){
+        customerRepository.deleteById(id);
     }
 }
