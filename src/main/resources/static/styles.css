@@ -315,4 +315,15 @@ select:focus{
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
+.simple-error{
+    color: red;
+    font-size: 8px;
+    grid-column-start: 1;
+    margin-left: 57%;
+    grid-column-end: 3;
+}
+.simple-error > p:before{
+    content:"-";
+    margin-right: 5px;
+}
 

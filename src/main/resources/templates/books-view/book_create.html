@@ -5,7 +5,7 @@
     <title>Создание книги</title>
     <link rel="stylesheet" href="/styles.css" type="text/css">
 </head>
-<body>
+<body onload="setMinSellingPrice()">
 <main class="content">
     <section class="form">
         <a class="button-close" th:href="@{/books}"></a>
@@ -20,40 +20,67 @@
                 <div class="form__fields">
                     <label for="isbn">ISBN:</label>
                     <input id="isbn" type="text" th:field="*{ISBN}"/>
+                    <div class="simple-error" th:if="${#fields.hasErrors('ISBN')}">
+                        <p th:each="error : ${#fields.errors('ISBN')}" th:text="${error}"/>
+                    </div>
 
                     <label for="title">Название:</label>
                     <input id="title" type="text" th:field="*{title}"/>
+                    <div class="simple-error" th:if="${#fields.hasErrors('title')}">
+                        <p th:each="error : ${#fields.errors('title')}" th:text="${error}"/>
+                    </div>
 
                     <label for="circulation">Тираж:</label>
                     <div class="input-with-hint-wrapper">
                         <input id="circulation" type="number"
-                               onchange="updateAbsoluteFee()"
+                               onchange="updateAbsoluteFee();setZeroOnEmpty('circulation')"
                                min="0" th:field="*{circulation}"/>
                         <p class="input-hint" th:text="'экз.'"/>
+                    </div>
+                    <div class="simple-error" th:if="${#fields.hasErrors('circulation')}">
+                        <p th:each="error : ${#fields.errors('circulation')}"
+                           th:text="${error}"/>
                     </div>
 
                     <label for="issueDate">Дата печати:</label>
                     <input id="issueDate" type="date" th:field="*{issueDate}"/>
+                    <div class="simple-error" th:if="${#fields.hasErrors('issueDate')}">
+                        <p th:each="error : ${#fields.errors('issueDate')}"
+                           th:text="${error}"/>
+                    </div>
 
                     <label for="costPrice">Себестоимость:</label>
                     <div class="input-with-hint-wrapper">
-                        <input id="costPrice" type="number" min="0"
-                               onchange="updateAbsoluteFee()" th:field="*{costPrice}"/>
+                        <input id="costPrice" type="number" min="0" value="0"
+                               onchange="updateAbsoluteFee(); setMinSellingPrice(); setZeroOnEmpty('costPrice')"
+                               th:field="*{costPrice}"/>
                         <p class="input-hint" th:text="'руб.'"/>
+                    </div>
+                    <div class="simple-error" th:if="${#fields.hasErrors('costPrice')}">
+                        <p th:each="error : ${#fields.errors('costPrice')}" th:text="${error}"/>
                     </div>
 
                     <label for="sellingPrice">Цена продажи:</label>
                     <div class="input-with-hint-wrapper">
-                        <input id="sellingPrice" type="number" min="0" value="0"
-                               onchange="updateAbsoluteFee()" th:field="*{sellingPrice}"/>
+                        <input id="sellingPrice" type="number" min="0"
+                               onchange="updateAbsoluteFee(); setMinSellingPrice(); setZeroOnEmpty('sellingPrice')"
+                               th:field="*{sellingPrice}"/>
                         <p class="input-hint" th:text="'руб.'" />
+                    </div>
+                    <div class="simple-error" th:if="${#fields.hasErrors('sellingPrice')}">
+                        <p th:each="error : ${#fields.errors('sellingPrice')}"
+                           th:text="${error}"/>
                     </div>
 
                     <label for="absoluteFee">Гонорар:</label>
                     <div class="input-with-hint-wrapper">
                         <input id="absoluteFee" type="number" min="0"
-                               th:field="*{absoluteFee}"/>
+                               th:field="*{absoluteFee}" readonly/>
                         <p class="input-hint" th:text="'тыс. руб.'"/>
+                    </div>
+                    <div class="simple-error" th:if="${#fields.hasErrors('absoluteFee')}">
+                        <p th:each="error : ${#fields.errors('absoluteFee')}"
+                           th:text="${error}"/>
                     </div>
                 </div>
             </div>

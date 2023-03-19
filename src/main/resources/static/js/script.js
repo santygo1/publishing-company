@@ -70,3 +70,18 @@ function setMinFinishDate(){
     }
     finishDate.setAttribute('min', min);
 }
+
+function setMinSellingPrice(){
+    let min = document.getElementById('costPrice').value;
+    let sellingPrice = document.getElementById('sellingPrice');
+    if (sellingPrice.value < min){
+        sellingPrice.value = min;
+    }
+    sellingPrice.setAttribute('min', min);
+}
+function setZeroOnEmpty(id){
+    let field = document.getElementById(id);
+    if (fieldIsEmpty(field)){
+        field.setAttribute('value', '0');
+    }
+}

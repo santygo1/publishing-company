@@ -1,12 +1,17 @@
 package ru.danilspirin.publishingcompany.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import ru.danilspirin.publishingcompany.exceptions.IsbnNonUniqueException;
 import ru.danilspirin.publishingcompany.models.Book;
 import ru.danilspirin.publishingcompany.models.Writer;
 import ru.danilspirin.publishingcompany.service.BookService;
@@ -49,8 +54,25 @@ public class BookController {
     }
 
     @PostMapping()
-    public String createBook(@ModelAttribute Book book) {
-        Book created = bookService.addBook(book);
+    public String createBook(@ModelAttribute @Valid Book book,
+                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            return "books-view/book_create";
+        }
+
+        Book created;
+        try {
+            created = bookService.addBook(book);
+        }catch (IsbnNonUniqueException ex){
+            bindingResult.addError(
+                    new FieldError("Book",
+                            "ISBN",
+                            book.getISBN(),
+                            false,null,null,
+                            ex.getMessage())
+            );
+            return "books-view/book_create";
+        }
         return "redirect:/books/" + created.getId();
     }
 
@@ -61,8 +83,28 @@ public class BookController {
     }
 
     @PatchMapping("/{id}")
-    public String editBook(@PathVariable String id, @ModelAttribute Book update) {
-        Book updated = bookService.changeBookInfo(id, update);
+    public String editBook(
+            @PathVariable String id,
+            @ModelAttribute @Valid Book update,
+            BindingResult bindingResult)
+    {
+        if (bindingResult.hasErrors()){
+            return "books-view/book_edit";
+        }
+
+        Book updated;
+        try {
+            updated = bookService.changeBookInfo(id, update);
+        }catch (IsbnNonUniqueException ex){
+            bindingResult.addError(
+                    new FieldError("Book",
+                            "ISBN",
+                            update.getISBN(),
+                            false,null,null,
+                            ex.getMessage())
+            );
+            return "books-view/book_edit";
+        }
         return "redirect:/books/" + updated.getId();
     }
 
