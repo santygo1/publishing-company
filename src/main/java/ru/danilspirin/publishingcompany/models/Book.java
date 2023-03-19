@@ -31,9 +31,11 @@ public class Book {
     @Column(name  = "isbn", unique = true)
     String ISBN;
 
+    @Size(max = 128, message = "Название книги должно быть короче 128 символов")
     @NotBlank(message = "Укажите название книги")
     String title;
 
+    @Max(value = 1_000_000_000, message = "Тираж должен быть меньше 1 000 000 000 экземпляров")
     @Min(value = 0, message = "Тираж должен быть положительным либо равен 0")
     int circulation;
 
@@ -41,13 +43,16 @@ public class Book {
     @Column(name = "issue_date")
     LocalDate issueDate;
 
-    @Min(value = 0, message = "Цена должна быть положительной.")
+    @Max(value= 10_000, message = "Цена должна быть меньше 10 000 руб.")
+    @Min(value = 0, message = "Цена должна быть положительной или равна 0")
     @Column(name = "cost_price")
     int costPrice;
 
-    @Min(value = 0, message = "Цена должна быть положительной.")
+    @Max(value = 10_000, message = "Цена должна быть меньше 10 000 руб.")
+    @Min(value = 0, message = "Цена должна быть положительной или равно 0")
     @Column(name = "selling_price")
     int sellingPrice;
+
 
     @Min(value = 0, message = "Гонорар должен быть положительным")
     @Column(name = "absolute_fee")

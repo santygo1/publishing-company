@@ -22,7 +22,7 @@
         <div class="info__field">
             <div class="properties">
                 <p class="hint">Компания</p><p th:text="${customer.getCompany()}"/>
-                <p class="hint">Адрес</p><p th:text="${customer.getAddress()}"/>
+                <p class="hint">Адрес</p><p class="properties__field" th:text="${customer.getAddress()}"/>
             </div>
         </div>
 
@@ -31,7 +31,11 @@
             <div class="properties" th:with="fio=${customer.getOwnerFullName()}">
                 <p class="hint">Фамилия</p><p th:text="${fio.getSurname()}"></p>
                 <p class="hint">Имя</p><p th:text="${fio.getName()}"></p>
-                <p class="hint">Отчество</p><p th:text="${fio.getPatronymic()}"></p>
+                <p class="hint">Отчество</p>
+
+                <p th:if="${fio.getPatronymic().isEmpty()}" class="text-red">Отсутствует</p>
+                <p th:unless="${fio.getPatronymic().isEmpty()}" th:text="${fio.getPatronymic()}"></p>
+
                 <p class="hint">Номер телефона</p><p th:text="${customer.getPhoneNumber()}"></p>
             </div>
         </div>
@@ -56,7 +60,7 @@
             <thead>
             <tr class="head">
                 <th>Номер заказа</th>
-                <th>Количество экземпляров</th>
+                <th style="width: 15%">Количество экземпляров</th>
                 <th>Дата поступления</th>
                 <th>Дата завершения</th>
                 <th></th>

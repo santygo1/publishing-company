@@ -1,10 +1,7 @@
 package ru.danilspirin.publishingcompany.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,8 +16,8 @@ public class Contract{
     @Id
     String id = UUID.randomUUID().toString();
 
+    @Size(max = 64, message = "Номер контракта должен быть короче 64 символов")
     @NotBlank(message = "Укажите номер контракта")
-    @Pattern(regexp = "\\d+", message = "Номер контракта должен содержать только цифры")
     @Column(name = "contract_number", unique = true)
     String contractNumber;
 
@@ -29,6 +26,7 @@ public class Contract{
     LocalDate createDate; // Дата заключения контракта
 
     @NotNull(message = "Укажите длительность контракта")
+    @Max(value = 100, message = "Длительность контракта должна быть меньше 100 лет")
     @Min(value = 1, message = "Длительность контракта должна быть больше 1 года")
     int duration; // Длительность контракта (в годах)
 

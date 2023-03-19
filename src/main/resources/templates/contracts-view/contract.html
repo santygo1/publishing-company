@@ -16,7 +16,7 @@
           <hr>
           <div class="properties-table contract-info">
               <p class="hint">ID:</p><p th:text="${contract.getId()}"></p>
-              <p class="hint">Номер контракта:</p><p th:text="${contract.getContractNumber()}"></p>
+              <p class="hint">Номер контракта:</p><p class="properties__field" th:text="${contract.getContractNumber()}"></p>
               <p class="hint">Дата заключения:</p><p th:text="${#temporals.format(contract.getCreateDate(), 'dd.MM.yyyy')}"></p>
               <p class="hint">Дата расторжения:</p><p th:text="${#temporals.format(contract.getFinishDate(), 'dd.MM.yyyy')}"></p>
               <p class="hint">Длительность(в годах):</p><p th:text="${contract.getDuration()}"></p>

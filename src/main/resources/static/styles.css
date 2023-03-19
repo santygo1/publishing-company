@@ -326,4 +326,10 @@ select:focus{
     content:"-";
     margin-right: 5px;
 }
-
+.properties__field{
+    word-break: break-word;
+}
+.break-table-cell{
+    max-width: 30%;
+    word-break: break-word;
+}

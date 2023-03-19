@@ -11,7 +11,7 @@
         <table class="table">
             <thead>
             <tr>
-                <th>Компания</th>
+                <th style="width: 25%" class="break-table-cell">Компания</th>
                 <th>Представитель</th>
                 <th>Адрес</th>
                 <th>Номер телефона</th>
@@ -20,11 +20,11 @@
             <tbody>
             <tr th:each="customer : ${customers}">
                 <td>
-                    <a th:text="${customer.getCompany()}"
+                    <a style="word-break: break-word" th:text="${customer.getCompany()}"
                        th:href="@{/customers/{id}(id=${customer.getId()})}"></a>
                 </td>
-                <td th:text="${customer.getOwnerFullName().initials()}"></td>
-                <td class="address-cell" th:text="${customer.getAddress()}"></td>
+                <td class="break-table-cell" style="width: 25%;" th:text="${customer.getOwnerFullName().initials()}"></td>
+                <td class="break-table-cell" style="width: 30%" th:text="${customer.getAddress()}"></td>
                 <td th:text="${customer.getPhoneNumber()}"></td>
             </tr>
             </tbody>

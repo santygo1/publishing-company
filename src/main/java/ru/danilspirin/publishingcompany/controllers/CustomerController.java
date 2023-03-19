@@ -1,11 +1,13 @@
 package ru.danilspirin.publishingcompany.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.danilspirin.publishingcompany.models.Customer;
 import ru.danilspirin.publishingcompany.service.CustomerService;
@@ -41,9 +43,14 @@ public class CustomerController {
     }
 
     @PatchMapping("{id}")
-    public String editContract(
+    public String editCustomer(
             @PathVariable String id,
-            @ModelAttribute("customer") Customer update){
+            @ModelAttribute("customer") @Valid Customer update,
+            BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return "customers-view/customer_edit";
+        }
+        // Не проверяю try/catch т.к. выкидывается на верхний обработчик
         Customer updated = customerService.changeCustomerInfo(id, update);
         return "redirect:/customers/"+ updated.getId();
     }

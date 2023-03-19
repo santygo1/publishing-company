@@ -53,7 +53,7 @@
       <thead>
       <tr class="head">
         <th>Номер заказа</th>
-        <th>Заказчик</th>
+        <th class="break-table-cell">Заказчик</th>
         <th>Количество экземпляров</th>
         <th>Дата поступления</th>
         <th>Дата завершения</th>
@@ -63,7 +63,8 @@
       <tbody>
       <tr class="stroke" th:each="order : ${orders}">
         <td><a th:text="${order.getOrderNumber()}"/></td>
-        <td><a th:if="${order.getCustomer() != null}"
+        <td class="break-table-cell">
+          <a style="word-break: break-word" th:if="${order.getCustomer() != null}"
                th:text="${order.getCustomer().getCompany()}"
                th:href="@{/customers/{id}(id=${order.getCustomer().getId()})}"/>
         </td>

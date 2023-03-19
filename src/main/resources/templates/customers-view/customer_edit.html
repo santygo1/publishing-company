@@ -19,10 +19,18 @@
                 <h3 class="subfield__title">Редактирование заказчика</h3>
                 <div class="form__fields">
                     <label for="company">Компания:</label>
-                    <input id="company" type="text" th:field="*{company}"/>
+                    <input id="company" maxlength="64" type="text" th:field="*{company}"/>
+                    <div class="simple-error" th:if="${#fields.hasErrors('company')}">
+                        <p th:each="error : ${#fields.errors('company')}"
+                           th:text="${error}"/>
+                    </div>
 
                     <label for="title">Адрес:</label>
-                    <input id="title" type="text" th:field="*{address}"/>
+                    <input id="title" type="text" maxlength="128" th:field="*{address}"/>
+                    <div class="simple-error" th:if="${#fields.hasErrors('address')}">
+                        <p th:each="error : ${#fields.errors('address')}"
+                           th:text="${error}"/>
+                    </div>
                 </div>
             </div>
 
@@ -32,19 +40,39 @@
                 <div class="form__fields">
                     <label for="surname">Фамилия:</label>
                     <input id="surname"
-                           type="text" th:field="*{ownerFullName.surname}"/>
+                           type="text" th:field="*{ownerFullName.surname}"
+                           oninput="setCorrectFioField('surname')"
+                           maxlength="64"/>
+                    <div class="simple-error" th:if="${#fields.hasErrors('ownerFullName.surname')}">
+                        <p th:each="error : ${#fields.errors('ownerFullName.surname')}"
+                           th:text="${error}"/>
+                    </div>
 
                     <label for="name">Имя:</label>
                     <input id="name"
-                           type="text" th:field="*{ownerFullName.name}"/>
+                           type="text" th:field="*{ownerFullName.name}"
+                           oninput="setCorrectFioField('name')" maxlength="64"/>
+                    <div class="simple-error" th:if="${#fields.hasErrors('ownerFullName.name')}">
+                        <p th:each="error : ${#fields.errors('ownerFullName.name')}"
+                           th:text="${error}"/>
+                    </div>
 
                     <label for="patronymic">Отчество:</label>
                     <input id="patronymic"
-                           type="text" th:field="*{ownerFullName.patronymic}"/>
+                           type="text" th:field="*{ownerFullName.patronymic}"
+                           oninput="setCorrectFioField('patronymic')" maxlength="64"/>
+                    <div class="simple-error" th:if="${#fields.hasErrors('ownerFullName.patronymic')}">
+                        <p th:each="error : ${#fields.errors('ownerFullName.patronymic')}"
+                           th:text="${error}"/>
+                    </div>
 
                     <label for="phoneNumber">Номер телефона:</label>
-                    <input id="phoneNumber"
-                           type="text" th:field="*{phoneNumber}"/>
+                    <input id="phoneNumber" placeholder="+7 (000) 000-00-00"
+                           type="text" th:field="*{phoneNumber}" />
+                    <div class="simple-error" th:if="${#fields.hasErrors('phoneNumber')}">
+                        <p th:each="error : ${#fields.errors('phoneNumber')}"
+                           th:text="${error}"/>
+                    </div>
                 </div>
             </div>
 
@@ -55,6 +83,9 @@
             </div>
         </form>
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript"></script>
 </main>
+<script src="/js/script.js"></script>
 </body>
 </html>

@@ -13,8 +13,12 @@
                   th:object="${contract}">
                 <h3 class="subfield__title">Редактирование контракта</h3>
                 <div class="form__fields">
+
                     <label for="contractNumber">Номер контракта:</label>
-                    <input id="contractNumber" type="text" th:field="*{contractNumber}"/>
+                    <input id="contractNumber"
+                           type="text"
+                           th:field="*{contractNumber}"
+                           maxlength="64"/>
                     <div class="simple-error" th:if="${#fields.hasErrors('contractNumber')}">
                         <p th:each="error : ${#fields.errors('contractNumber')}" th:text="${error}"/>
                     </div>
@@ -31,17 +35,17 @@
 
                     <label for="duration">Длительность контракта:</label>
                     <div class="input-with-hint-wrapper">
-                        <input id="duration" type="number" min="1" th:field="*{duration}"
-                               oninput="updateFinishDate(); setMin('duration')"/>
+                        <input id="duration" type="number" min="1" max="100" th:field="*{duration}"
+                               oninput="updateFinishDate(); setMin('duration'); setMax('duration')"/>
                         <p class="input-hint" th:text="'г.'"/>
                     </div>
                     <div class="simple-error" th:if="${#fields.hasErrors('duration')}">
                         <p th:each="error : ${#fields.errors('duration')}" th:text="${error}"/>
                     </div>
 
-                    <label class="emerging" id="finishDate-label" for="finishDate" hidden>Дата расторжения:</label>
+                    <label class="emerging" id="finishDate-label" for="finishDate" >Дата расторжения:</label>
                     <input class="emerging" id="finishDate" type="date" th:field="*{finishDate}"
-                           hidden readonly/>
+                           readonly/>
                 </div>
                 <div class="button-container">
                     <input class="button" type="submit" value="Изменить">

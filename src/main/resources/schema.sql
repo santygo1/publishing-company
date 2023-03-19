@@ -12,20 +12,20 @@ CREATE TABLE IF NOT EXISTS writers(
     /* Паспортные данные*/
     passport_series VARCHAR(4) NOT NULL,
     passport_id VARCHAR(6) NOT NULL, -- номер паспорта
-    surname VARCHAR NOT NULL,
-    "name" VARCHAR NOT NULL,
-    patronymic VARCHAR NOT NULL,
+    surname VARCHAR(64) NOT NULL,
+    "name" VARCHAR(64) NOT NULL,
+    patronymic VARCHAR(64) NOT NULL,
 
 
     address VARCHAR NULL,
-    phone_number VARCHAR NULL,
+    phone_number VARCHAR(18) NULL,
 
     UNIQUE (passport_id, passport_series)
 );
 CREATE TABLE IF NOT EXISTS contracts(
     id VARCHAR PRIMARY KEY,
     writer_id VARCHAR REFERENCES writers(id) ON DELETE SET NULL ON UPDATE CASCADE,
-    contract_number VARCHAR UNIQUE NOT NULL,
+    contract_number VARCHAR(64) UNIQUE NOT NULL,
     create_date DATE NOT NULL, -- дата заключения контракта
     duration SMALLINT NOT NULL CONSTRAINT must_be_positive_or_zero CHECK ( duration >= 0 ), -- длительность контракта(кол-во лет)
     is_finished BOOLEAN DEFAULT FALSE,  -- расторгнут ли контракт
@@ -52,12 +52,12 @@ CREATE TABLE IF NOT EXISTS writers_books(
 
 CREATE TABLE IF NOT EXISTS customers(
     id VARCHAR PRIMARY KEY,
-    company VARCHAR NOT NULL,
-    company_address VARCHAR NOT NULL,
-    phone_number VARCHAR NOT NULL,
-    surname VARCHAR NOT NULL,
-    "name" VARCHAR NOT NULL,
-    patronymic VARCHAR NOT NULL
+    company VARCHAR(64) NOT NULL,
+    company_address VARCHAR(128) NOT NULL,
+    phone_number VARCHAR(18) NOT NULL,
+    surname VARCHAR(64) NOT NULL,
+    "name" VARCHAR(64) NOT NULL,
+    patronymic VARCHAR(64) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS orders(

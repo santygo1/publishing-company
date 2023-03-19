@@ -65,7 +65,7 @@
             <div class="properties">
                 <p class="hint">Название</p><p th:text="${customer.getCompany()}"></p>
                 <p class="hint">Представитель</p><p th:text="${customer.getOwnerFullName().initials()}"></p>
-                <p class="hint">Адрес</p><p th:text="${customer.getAddress()}"></p>
+                <p class="hint">Адрес</p><p class="properties__field" th:text="${customer.getAddress()}"></p>
                 <p class="hint">Телефон</p><p th:text="${customer.getPhoneNumber()}"></p>
             </div>
         </div>

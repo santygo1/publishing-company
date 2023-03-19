@@ -4,17 +4,12 @@ function updateFinishDate(){
     let finishDateField = document.getElementById('finishDate');
     let finishDateLabel = document.getElementById('finishDate-label');
 
-    if (createDateField.value.length !== 0 && ( 0 < parseInt(durationField.value) && parseInt(durationField.value) <= 100)){
+    if (createDateField.value.length !== 0 && ( 0 <= parseInt(durationField.value) && parseInt(durationField.value) <= 100)){
         let creationDate = new Date(createDateField.value);
         let duration = parseInt(durationField.value);
         creationDate.setFullYear(creationDate.getFullYear() + duration);
-
-        finishDateField.hidden = false;
-        finishDateLabel.hidden = false;
         finishDateField.setAttribute('value', creationDate.toISOString().split('T')[0]);
     }else{
-        finishDateLabel.hidden = true;
-        finishDateField.hidden = true;
         finishDateField.setAttribute('value', '' );
     }
 }
@@ -89,7 +84,32 @@ function setZeroOnEmpty(id){
 /* Устанавливает текущее значение на минимальное разрешенное*/
 function setMin(id){
     let field = document.getElementById(id);
-    if (field.value < field.min){
+    if (parseInt(field.value) < parseInt(field.min)){
         field.value = field.min;
     }
+    if (id === 'duration'){
+        updateFinishDate();
+    }
 }
+function setMax(id){
+    let field = document.getElementById(id);
+    console.log(field.value +"-"+ field.max);
+    if (parseInt(field.value) > parseInt(field.max)){
+        field.value = field.max;
+    }
+    if (id === 'duration'){
+        updateFinishDate();
+    }
+}
+
+function setCorrectFioField(id){
+    let field = document.getElementById(id);
+    field.value = field.value.replace(/[^A-Za-zА-Яа-я]*/g,"");
+
+    let fieldValue = field.value;
+    if (fieldValue.length !== 0)
+        field.value = fieldValue.at(0).toUpperCase() + fieldValue.substring(1,fieldValue.length);
+
+}
+$("#phoneNumber").mask("+7 (999) 999-99-99");
+
