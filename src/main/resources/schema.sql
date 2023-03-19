@@ -35,10 +35,10 @@ CREATE TABLE IF NOT EXISTS contracts(
 
 CREATE TABLE IF NOT EXISTS books(
     id VARCHAR PRIMARY KEY,
-    ISBN VARCHAR NOT NULL CONSTRAINT isbn_must_be_unique UNIQUE, -- International Standard Book Number
-    title VARCHAR NOT NULL,
+    ISBN VARCHAR(17) NOT NULL CONSTRAINT isbn_must_be_unique UNIQUE, -- International Standard Book Number
+    title VARCHAR(128) NOT NULL,
     circulation INTEGER CHECK ( circulation >= 0 ) , -- тираж
-    issue_date DATE NULL, -- дата выпуска
+    issue_date DATE NOT NULL, -- дата выпуска
     cost_price INTEGER NULL CHECK ( cost_price >= 0 ) , -- себестоимость одной книги
     selling_price INTEGER NULL CHECK ( selling_price >= 0) , -- выручка с одной проданной книги
     absolute_fee INTEGER NULL CHECK ( absolute_fee >= 0 ) -- общая сумма гонорара, выплачиваемая авторам

@@ -19,13 +19,21 @@
                 <h3 class="subfield__title">Добавление книги</h3>
                 <div class="form__fields">
                     <label for="isbn">ISBN:</label>
-                    <input id="isbn" type="text" th:field="*{ISBN}"/>
+                    <input id="isbn"
+                           type="text"
+                           th:field="*{ISBN}"
+                           minlength="17"
+                           maxlength="17"
+                           oninput="setCorrectISBN()"/>
                     <div class="simple-error" th:if="${#fields.hasErrors('ISBN')}">
                         <p th:each="error : ${#fields.errors('ISBN')}" th:text="${error}"/>
                     </div>
 
                     <label for="title">Название:</label>
-                    <input id="title" type="text" th:field="*{title}"/>
+                    <input id="title"
+                           type="text"
+                           th:field="*{title}"
+                           maxlength="128"/>
                     <div class="simple-error" th:if="${#fields.hasErrors('title')}">
                         <p th:each="error : ${#fields.errors('title')}" th:text="${error}"/>
                     </div>
@@ -33,7 +41,9 @@
                     <label for="circulation">Тираж:</label>
                     <div class="input-with-hint-wrapper">
                         <input id="circulation" type="number"
+                               max="1000000000"
                                onchange="updateAbsoluteFee();setZeroOnEmpty('circulation')"
+                               oninput="setMin('circulation'); setMax('circulation'); setCorrectCirculation()"
                                min="0" th:field="*{circulation}"/>
                         <p class="input-hint" th:text="'экз.'"/>
                     </div>
@@ -62,7 +72,9 @@
 
                     <label for="sellingPrice">Цена продажи:</label>
                     <div class="input-with-hint-wrapper">
-                        <input id="sellingPrice" type="number" min="0"
+                        <input id="sellingPrice"
+                               type="number"
+                               min="0"
                                onchange="updateAbsoluteFee(); setMinSellingPrice(); setZeroOnEmpty('sellingPrice')"
                                th:field="*{sellingPrice}"/>
                         <p class="input-hint" th:text="'руб.'" />
@@ -74,7 +86,9 @@
 
                     <label for="absoluteFee">Гонорар:</label>
                     <div class="input-with-hint-wrapper">
-                        <input id="absoluteFee" type="number" min="0"
+                        <input id="absoluteFee"
+                               type="number"
+                               min="0"
                                th:field="*{absoluteFee}" readonly/>
                         <p class="input-hint" th:text="'тыс. руб.'"/>
                     </div>

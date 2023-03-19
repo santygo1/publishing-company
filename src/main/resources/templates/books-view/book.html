@@ -23,7 +23,7 @@
       <p class="title">Общая информация</p>
       <div class="properties">
         <p class="hint">ISBN</p><p th:text="${book.getISBN()}"/>
-        <p class="hint">Название</p><p th:text="${book.getTitle()}"/>
+        <p class="hint">Название</p><p class="properties__field" th:text="${book.getTitle()}"/>
         <p class="hint">Тираж</p><p th:text="${book.getCirculation()} + ' экз.'"></p>
         <p class="hint">Дата печати</p><p th:text="${#temporals.format(book.getIssueDate(),'dd.MM.yyyy')}"/>
       </div>

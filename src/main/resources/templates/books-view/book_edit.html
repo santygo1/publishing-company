@@ -19,22 +19,35 @@
                 <h3 class="subfield__title">Редактирование книги</h3>
                 <div class="form__fields">
                     <label for="isbn">ISBN:</label>
-                    <input id="isbn" type="text" th:field="*{ISBN}"/>
+                    <input id="isbn"
+                           type="text"
+                           th:field="*{ISBN}"
+                           minlength="17"
+                           maxlength="17"
+                           oninput="setCorrectISBN()"
+                    />
                     <div class="simple-error" th:if="${#fields.hasErrors('ISBN')}">
                         <p th:each="error : ${#fields.errors('ISBN')}" th:text="${error}"/>
                     </div>
 
                     <label for="title">Название:</label>
-                    <input id="title" type="text" th:field="*{title}"/>
+                    <input id="title"
+                           type="text"
+                           maxlength="128"
+                           th:field="*{title}"/>
                     <div class="simple-error" th:if="${#fields.hasErrors('title')}">
                         <p th:each="error : ${#fields.errors('title')}" th:text="${error}"/>
                     </div>
 
                     <label for="circulation">Тираж:</label>
                     <div class="input-with-hint-wrapper">
-                        <input id="circulation" type="number"
+                        <input id="circulation"
+                               type="number"
+                               max="1000000000"
+                               oninput="setMin('circulation'); setMax('circulation'); setCorrectCirculation()"
                                onchange="updateAbsoluteFee();setZeroOnEmpty('circulation')"
-                               min="0" th:field="*{circulation}"/>
+                               min="0"
+                               th:field="*{circulation}"/>
                         <p class="input-hint" th:text="'экз.'"/>
                     </div>
                     <div class="simple-error" th:if="${#fields.hasErrors('circulation')}">

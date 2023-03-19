@@ -25,7 +25,6 @@ function updateAbsoluteFee(){
         !fieldIsEmpty(circulationField))
     {
         let absoluteFee = (parseInt(sellingPriceField.value) - parseInt(costPriceField.value)) * parseInt(circulationField.value);
-        console.log()
         if (absoluteFee >= 0){
             absoluteFeeField.setAttribute('value',
                 '' + Math.round(absoluteFee/1000)) ;
@@ -90,15 +89,20 @@ function setMin(id){
     if (id === 'duration'){
         updateFinishDate();
     }
+    if (id === 'circulation'){
+        updateAbsoluteFee();
+    }
 }
 function setMax(id){
     let field = document.getElementById(id);
-    console.log(field.value +"-"+ field.max);
     if (parseInt(field.value) > parseInt(field.max)){
         field.value = field.max;
     }
     if (id === 'duration'){
         updateFinishDate();
+    }
+    if (id === 'circulation'){
+        updateAbsoluteFee();
     }
 }
 
@@ -113,3 +117,12 @@ function setCorrectFioField(id){
 }
 $("#phoneNumber").mask("+7 (999) 999-99-99");
 
+function setCorrectISBN(){
+    let isbnField = document.getElementById('isbn');
+    isbnField.value = isbnField.value.replace(/[^0-9\\-]/g, '');
+}
+function setCorrectCirculation(){
+    let circulationField = document.getElementById('circulation');
+    circulationField.value = circulationField.value.replace(/[^0-9]/g, '');
+    circulationField.value = circulationField.value.replace(/0+[1-9]/g,'');
+}
