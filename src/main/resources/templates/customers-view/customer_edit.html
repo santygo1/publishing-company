@@ -19,14 +19,20 @@
                 <h3 class="subfield__title">Редактирование заказчика</h3>
                 <div class="form__fields">
                     <label for="company">Компания:</label>
-                    <input id="company" maxlength="64" type="text" th:field="*{company}"/>
+                    <input id="company"
+                           maxlength="64"
+                           type="text"
+                           th:field="*{company}"/>
                     <div class="simple-error" th:if="${#fields.hasErrors('company')}">
                         <p th:each="error : ${#fields.errors('company')}"
                            th:text="${error}"/>
                     </div>
 
                     <label for="title">Адрес:</label>
-                    <input id="title" type="text" maxlength="128" th:field="*{address}"/>
+                    <input id="title"
+                           type="text"
+                           maxlength="128"
+                           th:field="*{address}"/>
                     <div class="simple-error" th:if="${#fields.hasErrors('address')}">
                         <p th:each="error : ${#fields.errors('address')}"
                            th:text="${error}"/>
@@ -40,7 +46,8 @@
                 <div class="form__fields">
                     <label for="surname">Фамилия:</label>
                     <input id="surname"
-                           type="text" th:field="*{ownerFullName.surname}"
+                           type="text"
+                           th:field="*{ownerFullName.surname}"
                            oninput="setCorrectFioField('surname')"
                            maxlength="64"/>
                     <div class="simple-error" th:if="${#fields.hasErrors('ownerFullName.surname')}">
@@ -51,7 +58,8 @@
                     <label for="name">Имя:</label>
                     <input id="name"
                            type="text" th:field="*{ownerFullName.name}"
-                           oninput="setCorrectFioField('name')" maxlength="64"/>
+                           oninput="setCorrectFioField('name')"
+                           maxlength="64"/>
                     <div class="simple-error" th:if="${#fields.hasErrors('ownerFullName.name')}">
                         <p th:each="error : ${#fields.errors('ownerFullName.name')}"
                            th:text="${error}"/>
@@ -60,7 +68,8 @@
                     <label for="patronymic">Отчество:</label>
                     <input id="patronymic"
                            type="text" th:field="*{ownerFullName.patronymic}"
-                           oninput="setCorrectFioField('patronymic')" maxlength="64"/>
+                           oninput="setCorrectFioField('patronymic')"
+                           maxlength="64"/>
                     <div class="simple-error" th:if="${#fields.hasErrors('ownerFullName.patronymic')}">
                         <p th:each="error : ${#fields.errors('ownerFullName.patronymic')}"
                            th:text="${error}"/>

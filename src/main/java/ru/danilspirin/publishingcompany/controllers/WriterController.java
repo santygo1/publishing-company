@@ -1,12 +1,17 @@
 package ru.danilspirin.publishingcompany.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import ru.danilspirin.publishingcompany.exceptions.ContractNumberNonUniqueException;
+import ru.danilspirin.publishingcompany.exceptions.PassportDataNonUniqueException;
 import ru.danilspirin.publishingcompany.models.Book;
 import ru.danilspirin.publishingcompany.models.Contract;
 import ru.danilspirin.publishingcompany.models.Writer;
@@ -55,10 +60,47 @@ public class WriterController {
 
     @PostMapping
     public String createNewWriterAndContract(
-            @ModelAttribute Writer writer) {
+            @ModelAttribute @Valid Writer writer,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            return "writers-view/writer_create";
+        }
 
-        Writer created = writerService.addWriterWithRelatedContract(writer);
-        log.info("Дата : {}", writer.getContract().getFinishDate());
+        Writer created;
+        try{
+            created = writerService.addWriterWithRelatedContract(writer);
+        }catch (PassportDataNonUniqueException ex){
+            FieldError passportIdError = new FieldError(
+                    "Writer",
+                    "passportId",
+                    writer.getPassportId(),
+                    false, null, null,
+                    ex.getMessage()
+            );
+            bindingResult.addError(passportIdError);
+
+            FieldError passportSeriesError = new FieldError(
+                    "Writer",
+                    "passportSeries",
+                    writer.getPassportSeries(),
+                    false, null,null,
+                    ex.getMessage()
+            );
+            bindingResult.addError(passportSeriesError);
+
+            return "writers-view/writer_create";
+        }catch (ContractNumberNonUniqueException ex){
+            bindingResult.addError(
+                    new FieldError(
+                            "Writer",
+                            "contract.contractNumber",
+                            writer.getContract().getContractNumber(),
+                            false,null,null,
+                            ex.getMessage()
+                    )
+            );
+            return "writers-view/writer_create";
+        }
         return "redirect:/writers/" + created.getId();
     }
 

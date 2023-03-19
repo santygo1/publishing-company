@@ -29,7 +29,10 @@ public class WriterService {
     BookRepository bookRepository;
 
     @Transactional
-    public Writer addWriterWithRelatedContract(Writer writer) {
+    public Writer addWriterWithRelatedContract(Writer writer) throws
+            PassportDataNonUniqueException,
+            ContractNumberNonUniqueException
+    {
 
         // Проверяем есть ли уже писатель с указанными паспортными данными в базе
         writerRepository.findByPassportSeriesAndPassportId(

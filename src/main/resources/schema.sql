@@ -14,11 +14,11 @@ CREATE TABLE IF NOT EXISTS writers(
     passport_id VARCHAR(6) NOT NULL, -- номер паспорта
     surname VARCHAR(64) NOT NULL,
     "name" VARCHAR(64) NOT NULL,
-    patronymic VARCHAR(64) NOT NULL,
+    patronymic VARCHAR(64) NULL,
 
 
-    address VARCHAR NULL,
-    phone_number VARCHAR(18) NULL,
+    address VARCHAR(128) NOT NULL,
+    phone_number VARCHAR(18) NOT NULL,
 
     UNIQUE (passport_id, passport_series)
 );
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS customers(
     phone_number VARCHAR(18) NOT NULL,
     surname VARCHAR(64) NOT NULL,
     "name" VARCHAR(64) NOT NULL,
-    patronymic VARCHAR(64) NOT NULL
+    patronymic VARCHAR(64) NULL
 );
 
 CREATE TABLE IF NOT EXISTS orders(

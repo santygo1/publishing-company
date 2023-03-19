@@ -126,3 +126,7 @@ function setCorrectCirculation(){
     circulationField.value = circulationField.value.replace(/[^0-9]/g, '');
     circulationField.value = circulationField.value.replace(/0+[1-9]/g,'');
 }
+function numericField(id){
+    let field = document.getElementById(id);
+    field.value = field.value.replace(/[^0-9]/g,'');
+}

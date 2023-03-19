@@ -35,7 +35,11 @@
 
                     <label for="duration">Длительность контракта:</label>
                     <div class="input-with-hint-wrapper">
-                        <input id="duration" type="number" min="1" max="100" th:field="*{duration}"
+                        <input id="duration"
+                               type="number"
+                               min="1"
+                               max="100"
+                               th:field="*{duration}"
                                oninput="updateFinishDate(); setMin('duration'); setMax('duration')"/>
                         <p class="input-hint" th:text="'г.'"/>
                     </div>
@@ -43,9 +47,13 @@
                         <p th:each="error : ${#fields.errors('duration')}" th:text="${error}"/>
                     </div>
 
-                    <label class="emerging" id="finishDate-label" for="finishDate" >Дата расторжения:</label>
-                    <input class="emerging" id="finishDate" type="date" th:field="*{finishDate}"
+                    <label id="finishDate-label" for="finishDate" >Дата расторжения:</label>
+                    <input id="finishDate" type="date" th:field="*{finishDate}"
                            readonly/>
+                    <div class="simple-error" th:if="${#fields.hasErrors('finishDate')}">
+                        <p th:each="error : ${#fields.errors('finishDate')}"
+                           th:text="${error}"/>
+                    </div>
                 </div>
                 <div class="button-container">
                     <input class="button" type="submit" value="Изменить">
