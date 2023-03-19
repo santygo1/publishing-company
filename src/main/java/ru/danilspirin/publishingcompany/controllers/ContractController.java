@@ -1,12 +1,16 @@
 package ru.danilspirin.publishingcompany.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import ru.danilspirin.publishingcompany.exceptions.ContractNumberNonUniqueException;
 import ru.danilspirin.publishingcompany.models.Contract;
 import ru.danilspirin.publishingcompany.service.ContractService;
 
@@ -43,10 +47,26 @@ public class ContractController {
     }
 
     @PatchMapping("/{id}")
-    public String editContract(@PathVariable String id,
-                                  @ModelAttribute Contract contract)
+    public String editContract(
+            @PathVariable String id,
+            @ModelAttribute @Valid Contract contract,
+            BindingResult bindingResult)
     {
-        Contract replaced = contractService.changeContractInfo(id, contract);
+        if (bindingResult.hasErrors()){
+            return "contracts-view/contract_edit";
+        }
+        Contract replaced;
+        try{
+            replaced = contractService.changeContractInfo(id, contract);
+        }catch (ContractNumberNonUniqueException ex){
+            bindingResult.addError(
+                    new FieldError("Contract", "contractNumber",
+                            contract.getContractNumber(),
+                            false,null,null,
+                            ex.getMessage())
+            );
+            return "contracts-view/contract_edit";
+        }
         return "redirect:/contracts/" + replaced.getId();
     }
 

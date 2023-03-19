@@ -5,7 +5,7 @@
     <title>Изменение контракта</title>
     <link rel="stylesheet" href="/styles.css" type="text/css">
 </head>
-<body>
+<body onload="updateFinishDate()">
     <main class="content">
         <section class="form">
             <a class="button-close" th:href="@{/contracts/{id}(id=${contract.getId()})}"></a>
@@ -15,16 +15,41 @@
                 <div class="form__fields">
                     <label for="contractNumber">Номер контракта:</label>
                     <input id="contractNumber" type="text" th:field="*{contractNumber}"/>
+                    <div class="simple-error" th:if="${#fields.hasErrors('contractNumber')}">
+                        <p th:each="error : ${#fields.errors('contractNumber')}" th:text="${error}"/>
+                    </div>
+
                     <label for="createDate">Дата заключения:</label>
-                    <input id="createDate" th:value="${#temporals.format(contract.getCreateDate(), 'yyyy-MM-dd')}" type="date" th:field="*{createDate}"/>
+                    <input id="createDate"
+                           th:value="${#temporals.format(contract.getCreateDate(), 'yyyy-MM-dd')}"
+                           type="date"
+                           th:field="*{createDate}"
+                           onchange="updateFinishDate()"/>
+                    <div class="simple-error" th:if="${#fields.hasErrors('createDate')}">
+                        <p th:each="error : ${#fields.errors('createDate')}" th:text="${error}"/>
+                    </div>
+
                     <label for="duration">Длительность контракта:</label>
-                    <input id="duration" type="number" th:field="*{duration}"/>
+                    <div class="input-with-hint-wrapper">
+                        <input id="duration" type="number" min="1" th:field="*{duration}"
+                               oninput="updateFinishDate(); setMin('duration')"/>
+                        <p class="input-hint" th:text="'г.'"/>
+                    </div>
+                    <div class="simple-error" th:if="${#fields.hasErrors('duration')}">
+                        <p th:each="error : ${#fields.errors('duration')}" th:text="${error}"/>
+                    </div>
+
+                    <label class="emerging" id="finishDate-label" for="finishDate" hidden>Дата расторжения:</label>
+                    <input class="emerging" id="finishDate" type="date" th:field="*{finishDate}"
+                           hidden readonly/>
                 </div>
                 <div class="button-container">
                     <input class="button" type="submit" value="Изменить">
                     <a class="button" th:text="Отмена" th:href="@{/contracts/{id}(id=${contract.getId()})}"/>
                 </div>
             </form>
+
+            <script src="/js/script.js"></script>
         </section>
     </main>
 </body>

@@ -85,3 +85,11 @@ function setZeroOnEmpty(id){
         field.setAttribute('value', '0');
     }
 }
+
+/* Устанавливает текущее значение на минимальное разрешенное*/
+function setMin(id){
+    let field = document.getElementById(id);
+    if (field.value < field.min){
+        field.value = field.min;
+    }
+}
