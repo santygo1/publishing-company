@@ -54,7 +54,9 @@ public class OrderService {
     }
 
     @Transactional
-    public Order changeOrderInfo(String id, Order update) {
+    public Order changeOrderInfo(String id, Order update) throws
+            EntityWithIdIsNotExistsException,
+            ContractNumberNonUniqueException{
         Order updatedOrder = orderRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Order.class)

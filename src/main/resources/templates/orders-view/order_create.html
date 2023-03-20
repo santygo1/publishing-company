@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/styles.css" type="text/css">
     <link rel="stylesheet" href="/orders.css" type="text/css">
 </head>
-<body onload="setMin('booksCount')">
+<body onload="setMin('booksCount'); setMinFinishDate()">
 <main class="content">
     <section class="form">
         <a class="button-close" th:href="@{/orders}"></a>
@@ -21,7 +21,10 @@
                     <h3 class="subfield__title">Данные заказа</h3>
                     <div th:class="form__fields">
                         <label for="orderNumber">Номер заказа:</label>
-                        <input id="orderNumber" type="text"th:field="*{order.orderNumber}" />
+                        <input id="orderNumber"
+                               type="text"
+                               maxlength="64"
+                               th:field="*{order.orderNumber}" />
                         <div class="simple-error"
                              th:if="${#fields.hasErrors('order.orderNumber')}">
                             <p th:each="error : ${#fields.errors('order.orderNumber')}" th:text="${error}"/>

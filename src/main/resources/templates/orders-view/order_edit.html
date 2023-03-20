@@ -5,7 +5,7 @@
   <title>Редактирование заказа</title>
   <link rel="stylesheet" href="/styles.css" type="text/css">
 </head>
-<body onload="setMinFinishDate()">
+<body onload="setMinFinishDate();setMin('booksCount')">
 <main class="content">
   <section class="form">
     <a class="button-close" th:href="@{/orders}"></a>
@@ -19,20 +19,43 @@
         <h3 class="subfield__title">Редактирование заказа</h3>
         <div class="form__fields">
           <label for="orderNumber">Номер заказа:</label>
-          <input id="orderNumber" type="text" th:field="*{orderNumber}"/>
+          <input id="orderNumber"
+                 type="text"
+                 maxlength="64"
+                 th:field="*{orderNumber}"/>
+          <div class="simple-error" th:if="${#fields.hasErrors('orderNumber')}">
+            <p th:each="error : ${#fields.errors('orderNumber')}" th:text="${error}"/>
+          </div>
 
           <label for="createDate">Дата создания:</label>
-          <input id="createDate" type="date" onchange="setMinFinishDate()"
+          <input id="createDate"
+                 type="date"
+                 onchange="setMinFinishDate()"
                  th:field="*{createDate}"/>
+          <div class="simple-error" th:if="${#fields.hasErrors('createDate')}">
+            <p th:each="error : ${#fields.errors('createDate')}" th:text="${error}"/>
+          </div>
 
           <label for="finishDate">Дата завершения:</label>
-          <input id="finishDate" type="date" th:field="*{finishDate}"/>
+          <input id="finishDate"
+                 type="date"
+                 th:field="*{finishDate}"/>
+          <div class="simple-error" th:if="${#fields.hasErrors('finishDate')}">
+            <p th:each="error : ${#fields.errors('finishDate')}" th:text="${error}"/>
+          </div>
 
           <h3 class="book__title">Книга</h3><p></p>
-          <p>ISBN книги:</p><a th:text="${order.getBook().getISBN()}"/>
 
           <label for="booksCount">Количество экземпляров</label>
-          <input id="booksCount" type="number" min="1" th:field="*{booksCount}">
+          <input id="booksCount" type="number"
+                 min="1"
+                 oninput="setMin('booksCount'); setMax('booksCount'); numericField('booksCount')"
+                 value="1"
+                 max="10000"
+                 th:field="*{booksCount}">
+          <div class="simple-error" th:if="${#fields.hasErrors('booksCount')}">
+            <p th:each="error : ${#fields.errors('booksCount')}" th:text="${error}"/>
+          </div>
       </div>
 
       <div class="button-container">
@@ -42,8 +65,10 @@
       </div>
     </form>
 
-    <script src="/js/script.js"></script>
   </section>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript"></script>
+<script src="/js/script.js"></script>
 </body>
 </html>

@@ -14,6 +14,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ru.danilspirin.publishingcompany.exceptions.BookServiceError;
+import ru.danilspirin.publishingcompany.exceptions.ContractNumberNonUniqueException;
 import ru.danilspirin.publishingcompany.exceptions.OrderNumberNonUniqueException;
 import ru.danilspirin.publishingcompany.models.Book;
 import ru.danilspirin.publishingcompany.models.Customer;
@@ -138,9 +139,19 @@ public class OrderController {
     @PatchMapping("/{id}")
     public String editOrder(
             @PathVariable String id,
-            @ModelAttribute("order") Order update){
-
-        Order updated = orderService.changeOrderInfo(id, update);
+            @ModelAttribute("order") @Valid Order update, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return "orders-view/order_edit";
+        }
+        Order updated;
+        try{
+            updated = orderService.changeOrderInfo(id, update);
+        }catch (ContractNumberNonUniqueException ex){
+            bindingResult.addError(
+                    new FieldError("Contract", "contractNumber", ex.getMessage())
+            );
+            return "orders-view/order_edit";
+        }
         return "redirect:/orders/" + updated.getId();
     }
 
