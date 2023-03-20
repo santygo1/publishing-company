@@ -24,7 +24,11 @@
                     <div class="properties" th:with="fio=${writer.getFullName()}">
                         <p class="hint">Фамилия</p><p th:text="${fio.getSurname()}"></p>
                         <p class="hint">Имя</p><p th:text="${fio.getName()}"></p>
-                        <p class="hint">Отчество</p><p th:text="${fio.getPatronymic()}"></p>
+
+                        <p class="hint">Отчество</p>
+                        <p th:if="${fio.getPatronymic().isEmpty()}" class="text-red">Отсутствует</p>
+                        <p th:unless="${fio.getPatronymic().isEmpty()}" th:text="${fio.getPatronymic()}"></p>
+
                         <p class="hint">Адрес</p><p th:text="${writer.getAddress()}"/>
                         <p class="hint">Номер телефона</p><p th:text="${writer.getPhoneNumber()}"/>
                     </div>

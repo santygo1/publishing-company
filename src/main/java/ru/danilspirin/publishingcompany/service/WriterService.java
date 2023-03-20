@@ -71,7 +71,9 @@ public class WriterService {
     }
 
     @Transactional
-    public Writer changeWriterInfo(String id, Writer update) {
+    public Writer changeWriterInfo(String id, Writer update) throws
+            EntityWithIdIsNotExistsException,
+            PassportDataNonUniqueException{
         Writer updatedWriter = writerRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityWithIdIsNotExistsException(id, Contract.class)

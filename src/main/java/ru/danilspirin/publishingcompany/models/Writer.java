@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Writer {
 
     @Id
-    final String id = UUID.randomUUID().toString();
+    String id = UUID.randomUUID().toString();
 
     @Valid
     @OneToOne(mappedBy = "writer")

@@ -15,25 +15,80 @@
             <h3 class="subfield__title">Редактирование книги</h3>
             <div class="form__fields">
                 <label for="surname">Фамилия:</label>
-                <input id="surname" type="text" th:field="*{fullName.surname}"/>
+                <input id="surname"
+                       type="text"
+                       oninput="setCorrectFioField('surname')"
+                       maxlength="64"
+                       th:field="*{fullName.surname}"/>
+                <div class="simple-error" th:if="${#fields.hasErrors('fullName.surname')}">
+                    <p th:each="error : ${#fields.errors('fullName.surname')}"
+                       th:text="${error}"/>
+                </div>
 
                 <label for="name">Имя:</label>
-                <input id="name" type="text" th:field="*{fullName.name}"/>
+                <input id="name"
+                       type="text"
+                       oninput="setCorrectFioField('name')"
+                       maxlength="64"
+                       th:field="*{fullName.name}"/>
+                <div class="simple-error" th:if="${#fields.hasErrors('fullName.name')}">
+                    <p th:each="error : ${#fields.errors('fullName.name')}"
+                       th:text="${error}"/>
+                </div>
 
                 <label for="patronymic">Отчество:</label>
-                <input id="patronymic" type="text" th:field="*{fullName.patronymic}"/>
+                <input id="patronymic"
+                       type="text"
+                       oninput="setCorrectFioField('patronymic')"
+                       maxlength="64"
+                       th:field="*{fullName.patronymic}"/>
+                <div class="simple-error" th:if="${#fields.hasErrors('fullName.patronymic')}">
+                    <p th:each="error : ${#fields.errors('fullName.patronymic')}"
+                       th:text="${error}"/>
+                </div>
 
                 <label for="address">Адрес:</label>
-                <input id="address" type="text" th:field="*{address}"/>
+                <input id="address"
+                       type="text"
+                       maxlength="128"
+                       th:field="*{address}"/>
+                <div class="simple-error" th:if="${#fields.hasErrors('address')}">
+                    <p th:each="error : ${#fields.errors('address')}"
+                       th:text="${error}"/>
+                </div>
 
                 <label for="phoneNumber">Номер телефона:</label>
-                <input id="phoneNumber" type="text" th:field="*{phoneNumber}"/>
+                <input id="phoneNumber"
+                       type="text"
+                       placeholder="+7 (000) 000-00-00"
+                       th:field="*{phoneNumber}"/>
+                <div class="simple-error" th:if="${#fields.hasErrors('phoneNumber')}">
+                    <p th:each="error : ${#fields.errors('phoneNumber')}"
+                       th:text="${error}"/>
+                </div>
 
                 <label for="passportSeries">Серия паспорта:</label>
-                <input id="passportSeries" type="text" maxlength="4" th:field="*{passportSeries}"/>
+                <input id="passportSeries" type="text"
+                       minlength="4"
+                       maxlength="4"
+                       oninput="numericField('passportSeries')"
+                       th:field="*{passportSeries}"/>
+                <div class="simple-error" th:if="${#fields.hasErrors('passportSeries')}">
+                    <p th:each="error : ${#fields.errors('passportSeries')}"
+                       th:text="${error}"/>
+                </div>
 
                 <label for="passportId">Номер паспорта:</label>
-                <input id="passportId" type="text" maxlength="6" th:field="*{passportId}"/>
+                <input id="passportId"
+                       type="text"
+                       minlength="6"
+                       maxlength="6"
+                       oninput="numericField('passportId')"
+                       th:field="*{passportId}"/>
+                <div class="simple-error" th:if="${#fields.hasErrors('passportId')}">
+                    <p th:each="error : ${#fields.errors('passportId')}"
+                       th:text="${error}"/>
+                </div>
             </div>
             <div class="button-container">
                 <input class="button" type="submit" value="Изменить">
@@ -42,5 +97,8 @@
         </form>
     </section>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript"></script>
+<script src="/js/script.js"></script>
 </body>
 </html>

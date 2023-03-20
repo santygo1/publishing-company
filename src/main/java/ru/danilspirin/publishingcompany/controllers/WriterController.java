@@ -113,9 +113,38 @@ public class WriterController {
     }
 
     @PatchMapping("/{id}")
-    public String editWriter(@PathVariable String id,
-                             @ModelAttribute("writer") Writer update) {
-        Writer updated = writerService.changeWriterInfo(id, update);
+    public String editWriter(
+            @PathVariable String id,
+            @ModelAttribute("writer") @Valid Writer update,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            return "writers-view/writer_edit";
+        }
+
+        Writer updated;
+        try {
+            updated = writerService.changeWriterInfo(id, update);
+        }catch (PassportDataNonUniqueException ex){
+            FieldError passportIdError = new FieldError(
+                    "Writer",
+                    "passportId",
+                    update.getPassportId(),
+                    false, null, null,
+                    ex.getMessage()
+            );
+            bindingResult.addError(passportIdError);
+
+            FieldError passportSeriesError = new FieldError(
+                    "Writer",
+                    "passportSeries",
+                    update.getPassportSeries(),
+                    false, null,null,
+                    ex.getMessage()
+            );
+            bindingResult.addError(passportSeriesError);
+
+            return "writers-view/writer_edit";
+        }
         return "redirect:/writers/" + updated.getId();
     }
 
