@@ -29,7 +29,7 @@
                         <p th:if="${fio.getPatronymic().isEmpty()}" class="text-red">Отсутствует</p>
                         <p th:unless="${fio.getPatronymic().isEmpty()}" th:text="${fio.getPatronymic()}"></p>
 
-                        <p class="hint">Адрес</p><p th:text="${writer.getAddress()}"/>
+                        <p class="hint">Адрес</p><p class="properties__field" th:text="${writer.getAddress()}"/>
                         <p class="hint">Номер телефона</p><p th:text="${writer.getPhoneNumber()}"/>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                 <a class="go-to-link" th:href="@{/books}">Все</a>
                 <hr>
                 <form class="select-card-form" th:unless="${books.isEmpty()}" th:method="PATCH" th:action="@{/writers/{id}/books(id=${writer.getId()})}">
-                    <select name="selectedBookId">
+                    <select style="width: 60%" name="selectedBookId">
                         <option value="" selected>Выбрать книгу</option>
                         <option th:each="book: ${books}" th:value="${book.getId()}"
                                 th:text="'«' + ${book.getTitle()} + '»' +' - ' + 'ISBN: '+ ${book.getISBN()}"/>
@@ -87,7 +87,7 @@
                                   id="delete-book-form" hidden
                                   th:action="@{/writers/{id}/books/{bookId}(id=${writer.getId()},bookId=${book.getId()})}">
                             </form>
-                            <p class="book__title" th:text="${book.getTitle()}"/>
+                            <p class="book__title properties__field" th:text="${book.getTitle()}"/>
                             <div class="properties-table">
                                 <p>Дата:</p>
                                 <p th:text="${#temporals.format(book.getIssueDate(),'dd.MM.yyyy')}"/>

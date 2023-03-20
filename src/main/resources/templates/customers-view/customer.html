@@ -59,7 +59,7 @@
         <table class="orders-table" th:unless="${orders.isEmpty()}">
             <thead>
             <tr class="head">
-                <th>Номер заказа</th>
+                <th style="width: 30%">Номер заказа</th>
                 <th style="width: 15%">Количество экземпляров</th>
                 <th>Дата поступления</th>
                 <th>Дата завершения</th>
@@ -68,7 +68,7 @@
             </thead>
             <tbody>
             <tr class="stroke" th:each="order : ${orders}">
-                <td><a th:text="${order.getOrderNumber()}"/></td>
+                <td><a class="break-table-cell" th:text="${order.getOrderNumber()}"/></td>
                 <td th:text="${order.getBooksCount()}"/>
                 <td th:text="${order.getCreateDate()}"/>
                 <td th:text="${order.getFinishDate()}"/>

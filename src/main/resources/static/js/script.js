@@ -67,7 +67,7 @@ function setMinFinishDate(){
 function setMinSellingPrice(){
     let min = document.getElementById('costPrice').value;
     let sellingPrice = document.getElementById('sellingPrice');
-    if (sellingPrice.value < min){
+    if (parseInt(sellingPrice.value) < parseInt(min)){
         sellingPrice.value = min;
     }
     sellingPrice.setAttribute('min', min);
@@ -128,4 +128,13 @@ function setCorrectCirculation(){
 function numericField(id){
     let field = document.getElementById(id);
     field.value = field.value.replace(/[^0-9]/g,'');
+}
+
+function setCorrectMaxSelingPriceValue(){
+    let selling = document.getElementById('sellingPrice');
+    let cost = document.getElementById('costPrice').value;
+    let maxValue = 10000;
+    if (parseInt(cost) === maxValue){
+        selling.value = maxValue;
+    }
 }

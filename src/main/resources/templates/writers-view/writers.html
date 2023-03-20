@@ -12,8 +12,8 @@
                 <a th:href="@{/writers/create}" class="button button-add"><p>Добавить</p><img src="/icon/ic_add.svg"/></a>
                 <table class="table">
                     <thead>
-                    <th>Писатель</th>
-                    <th>Контракт</th>
+                    <th style="width:20%">Писатель</th>
+                    <th style="width:20%">Номер контракта</th>
                     <th>Серия паспорта</th>
                     <th>Номер паспорта</th>
                     <th>Номер телефона</th>
@@ -21,11 +21,11 @@
                     <tbody>
                     <tr th:each="writer : ${writers}">
                         <td>
-                            <a th:text="${writer.getFullName().initials()}"
+                            <a class="break-table-cell" th:text="${writer.getFullName().initials()}"
                                th:href="@{/writers/{id}(id=${writer.getId()})}"></a>
                         </td>
 
-                        <td th:with="contract=${writer.getContract()}">
+                        <td class="break-table-cell" th:with="contract=${writer.getContract()}">
                             <a th:text="${contract.getContractNumber()}" th:href="@{/contracts/{id}(id=${contract.getId()})}"/>
                         </td>
 

@@ -44,7 +44,7 @@
                         <input id="circulation"
                                type="number"
                                max="1000000000"
-                               oninput="setMin('circulation'); setMax('circulation'); setCorrectCirculation()"
+                               oninput="setMin('circulation'); setMax('circulation');numericField('circulation'); setCorrectCirculation()"
                                onchange="updateAbsoluteFee();setZeroOnEmpty('circulation')"
                                min="0"
                                th:field="*{circulation}"/>
@@ -64,8 +64,13 @@
 
                     <label for="costPrice">Себестоимость:</label>
                     <div class="input-with-hint-wrapper">
-                        <input id="costPrice" type="number" min="0"
-                               onchange="updateAbsoluteFee(); setMinSellingPrice(); setZeroOnEmpty('costPrice')" th:field="*{costPrice}"/>
+                        <input id="costPrice"
+                               type="number"
+                               min="0"
+                               max="10000"
+                               oninput="numericField('costPrice');setMinSellingPrice(); setCorrectMaxSelingPriceValue(); setMax('costPrice');"
+                               onchange="updateAbsoluteFee(); setMinSellingPrice(); setCorrectMaxSelingPriceValue();setZeroOnEmpty('costPrice')"
+                               th:field="*{costPrice}"/>
                         <p class="input-hint" th:text="'руб.'"/>
                     </div>
                     <div class="simple-error" th:if="${#fields.hasErrors('costPrice')}">
@@ -74,8 +79,14 @@
 
                     <label for="sellingPrice">Цена продажи:</label>
                     <div class="input-with-hint-wrapper">
-                        <input id="sellingPrice" type="number" min="0" value="0"
-                               onchange="updateAbsoluteFee();setMinSellingPrice();setZeroOnEmpty('sellingPrice')" th:field="*{sellingPrice}"/>
+                        <input id="sellingPrice"
+                               type="number"
+                               min="0"
+                               value="0"
+                               max="10000"
+                               oninput="numericField('sellingPrice'); setMax('sellingPrice')"
+                               onchange="updateAbsoluteFee();setMinSellingPrice(); setZeroOnEmpty('sellingPrice')"
+                               th:field="*{sellingPrice}"/>
                         <p class="input-hint" th:text="'руб.'" />
                     </div>
                     <div class="simple-error" th:if="${#fields.hasErrors('sellingPrice')}">
@@ -85,8 +96,10 @@
 
                     <label for="absoluteFee">Гонорар:</label>
                     <div class="input-with-hint-wrapper">
-                        <input id="absoluteFee" type="number" min="0"
-                               th:field="*{absoluteFee}"/>
+                        <input id="absoluteFee"
+                               type="number"
+                               min="0"
+                               th:field="*{absoluteFee}" readonly/>
                         <p class="input-hint" th:text="'тыс. руб.'"/>
                     </div>
                     <div class="simple-error" th:if="${#fields.hasErrors('absoluteFee')}">
@@ -102,8 +115,8 @@
             </div>
         </form>
 
-        <script src="/js/script.js"></script>
     </section>
 </main>
+<script src="/js/script.js"></script>
 </body>
 </html>

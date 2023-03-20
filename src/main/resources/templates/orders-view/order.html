@@ -22,8 +22,9 @@
                 <p class="hint">Дата поступления</p><p
                     th:text="${#temporals.format(order.getCreateDate(),'dd.MM.yyyy')}"/>
 
-                <p class="hint">Дата выполнения</p><p
-                    th:text="${#temporals.format(order.getFinishDate(), 'dd.MM.yyyy')}"/>
+                <p class="hint">Дата выполнения</p>
+                <p th:if="${order.getFinishDate()!=null}" th:text="${#temporals.format(order.getFinishDate(), 'dd.MM.yyyy')}"/>
+                <p th:if="${order.getFinishDate() == null}" class="text-red">Не закончен</p>
             </div>
         </div>
 

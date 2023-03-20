@@ -42,8 +42,8 @@
                     <div class="input-with-hint-wrapper">
                         <input id="circulation" type="number"
                                max="1000000000"
-                               onchange="updateAbsoluteFee();setZeroOnEmpty('circulation')"
-                               oninput="setMin('circulation'); setMax('circulation'); setCorrectCirculation()"
+                               onchange="updateAbsoluteFee();setZeroOnEmpty('circulation'); "
+                               oninput="setMin('circulation'); setMax('circulation');numericField('circulation'); setCorrectCirculation()"
                                min="0" th:field="*{circulation}"/>
                         <p class="input-hint" th:text="'экз.'"/>
                     </div>
@@ -61,8 +61,11 @@
 
                     <label for="costPrice">Себестоимость:</label>
                     <div class="input-with-hint-wrapper">
-                        <input id="costPrice" type="number" min="0" value="0"
-                               onchange="updateAbsoluteFee(); setMinSellingPrice(); setZeroOnEmpty('costPrice')"
+                        <input id="costPrice" type="number"
+                               min="0"
+                               max="10000"
+                               oninput="numericField('costPrice');setMinSellingPrice(); setCorrectMaxSelingPriceValue(); setMax('costPrice');"
+                               onchange="updateAbsoluteFee(); setMinSellingPrice(); setCorrectMaxSelingPriceValue();setZeroOnEmpty('costPrice')"
                                th:field="*{costPrice}"/>
                         <p class="input-hint" th:text="'руб.'"/>
                     </div>
@@ -75,7 +78,10 @@
                         <input id="sellingPrice"
                                type="number"
                                min="0"
-                               onchange="updateAbsoluteFee(); setMinSellingPrice(); setZeroOnEmpty('sellingPrice')"
+                               value="0"
+                               max="10000"
+                               oninput="numericField('sellingPrice'); setMax('sellingPrice')"
+                               onchange="updateAbsoluteFee();setMinSellingPrice(); setZeroOnEmpty('sellingPrice')"
                                th:field="*{sellingPrice}"/>
                         <p class="input-hint" th:text="'руб.'" />
                     </div>

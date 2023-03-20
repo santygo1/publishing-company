@@ -27,7 +27,7 @@
             <p th:each="error : ${#fields.errors('orderNumber')}" th:text="${error}"/>
           </div>
 
-          <label for="createDate">Дата создания:</label>
+          <label for="createDate">Дата поступления:</label>
           <input id="createDate"
                  type="date"
                  onchange="setMinFinishDate()"
@@ -36,7 +36,7 @@
             <p th:each="error : ${#fields.errors('createDate')}" th:text="${error}"/>
           </div>
 
-          <label for="finishDate">Дата завершения:</label>
+          <label for="finishDate">Дата выполнения:</label>
           <input id="finishDate"
                  type="date"
                  th:field="*{finishDate}"/>

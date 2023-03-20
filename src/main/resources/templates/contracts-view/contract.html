@@ -44,7 +44,7 @@
                   <p class="hint">Имя</p><p th:text="${writer.getFullName().getName()}"></p>
                   <p class="hint">Фамилия</p><p th:text="${writer.getFullName().getSurname()}"></p>
                   <p class="hint">Отчество</p><p th:text="${writer.getFullName().getPatronymic()}"></p>
-                  <p class="hint">Адрес</p><p th:text="${writer.getAddress()}"></p>
+                  <p class="hint">Адрес</p><p class="properties__field" th:text="${writer.getAddress()}"></p>
                   <p class="hint">Номер телефона</p><p th:text="${writer.getPhoneNumber()}"></p>
               </div>
               <div class="properties-table passport-info">

@@ -14,17 +14,17 @@
             </a>
             <table class="table">
                 <thead>
-                <th>Номер</th>
+                <th style="width: 20%;">Номер Заказа</th>
                 <th>Дата поступления</th>
                 <th>Дата выполнения</th>
                 <th>Количество экземпляров</th>
-                <th>Книга</th>
-                <th>Заказчик</th>
+                <th style="width: 20%">ISBN-книги</th>
+                <th style="width: 20%">Заказчик</th>
                 </thead>
                 <tbody>
                 <tr th:each="order : ${orders}">
                     <td>
-                        <a th:text="${order.getOrderNumber()}"
+                        <a class="break-table-cell" th:text="${order.getOrderNumber()}"
                            th:href="@{/orders/{id}(id=${order.getId()})}"></a>
                     </td>
 
@@ -33,11 +33,11 @@
 
                     <td th:text="${order.getBooksCount()}"/>
 
-                    <td><a th:if="${order.getBook() != null}"
+                    <td><a class="break-table-cell" th:if="${order.getBook() != null}"
                            th:href="@{/books/{id}(id=${order.getBook().getId()})}"
-                           th:text="${order.getBook().getTitle()}"/>
+                           th:text="${order.getBook().getISBN()}"/>
                     </td>
-                    <td><a th:if="${order.getCustomer() != null}"
+                    <td><a class="break-table-cell" th:if="${order.getCustomer() != null}"
                            th:href="@{/customers/{id}(id=${order.getCustomer().getId()})}"
                            th:text="${order.getCustomer().getCompany()}"/>
                     </td>

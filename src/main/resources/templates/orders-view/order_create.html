@@ -33,7 +33,7 @@
                             <p th:text="${orderIdError}"/>
                         </div>
 
-                        <label for="createDate">Дата создания:</label>
+                        <label for="createDate">Дата поступления:</label>
                         <input id="createDate" type="date"
                                onchange="setMinFinishDate()"
                                th:field="*{order.createDate}"/>
@@ -42,7 +42,7 @@
                             <p th:each="error : ${#fields.errors('order.createDate')}" th:text="${error}"/>
                         </div>
 
-                        <label for="finishDate">Дата завершения:</label>
+                        <label for="finishDate">Дата выполнения:</label>
                         <input id="finishDate" type="date" th:field="*{order.finishDate}"/>
                         <div class="simple-error" th:if="${#fields.hasErrors('order.finishDate')}">
                             <p th:each="error : ${#fields.errors('order.finishDate')}" th:text="${error}"/>
@@ -58,7 +58,7 @@
                           (selectedCustomerId == null || selectedCustomerId.isEmpty())} ?
                          'display:none' :
                          'display:flex'">
-                        <select name="selectedCustomerId">
+                        <select style="width:40%" name="selectedCustomerId">
                             <option id="defaultSelectCustomer" value=""
                                     th:selected="${selectedCustomerId == null || selectedCustomerId.isEmpty()}">Выбрать заказчика</option>
                             <option th:each="customer : ${customers}" th:value="${customer.getId()}"
@@ -159,7 +159,7 @@
 
             <div class="wrapper">
                 <h3 class="subfield__title">Книга</h3>
-                <select name="selectedBookId">
+                <select style="width: 60%" name="selectedBookId">
                     <option th:each="book,index : ${books}"
                             th:selected="${selectedBookId != null && selectedBookId.isEmpty()} ?
                             ${index.first}:

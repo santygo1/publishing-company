@@ -52,8 +52,8 @@
     <table class="orders-table" th:unless="${orders.isEmpty()}">
       <thead>
       <tr class="head">
-        <th>Номер заказа</th>
-        <th class="break-table-cell">Заказчик</th>
+        <th style="width:30%" >Номер заказа</th>
+        <th style="width: 30%">Заказчик</th>
         <th>Количество экземпляров</th>
         <th>Дата поступления</th>
         <th>Дата завершения</th>
@@ -62,7 +62,7 @@
       </thead>
       <tbody>
       <tr class="stroke" th:each="order : ${orders}">
-        <td><a th:text="${order.getOrderNumber()}"/></td>
+        <td><a class="break-table-cell" th:text="${order.getOrderNumber()}"/></td>
         <td class="break-table-cell">
           <a style="word-break: break-word" th:if="${order.getCustomer() != null}"
                th:text="${order.getCustomer().getCompany()}"
@@ -85,7 +85,7 @@
     <form class="select-card-form" th:unless="${writers.isEmpty()}"
           th:method="PATCH" th:action="@{/books/{id}/writers(id=${book.getId()})}">
 
-      <select name="selectedWriterId">
+      <select style="width: 60%;" name="selectedWriterId">
         <option value="" selected>Выбрать писателя</option>
         <option th:each="writer : ${writers}" th:value="${writer.getId()}"
                 th:text="${writer.getFullName().initials()} + ' - ' + 'Номер контракта: '+ ${writer.getContract().getContractNumber()}"/>
@@ -104,10 +104,7 @@
                 th:action="@{/books/{id}/writers/{writerId}(id=${book.getId()},writerId=${writer.getId()})}">
           </form>
 
-          <p th:text="${writer.getFullName().initials()}"/>
-          <div class="properties-table" style="display: flex; gap: 10px;">
-            <p>Контракт:</p><p th:text="${writer.getContract().getContractNumber()}"/>
-          </div>
+          <p class="properties__field" th:text="${writer.getFullName().initials()}"/>
 
           <div class="button-container">
             <a class="button" th:href="@{/writers/{id}(id=${writer.getId()})}">Посмотреть</a>

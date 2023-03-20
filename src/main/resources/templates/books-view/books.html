@@ -15,7 +15,7 @@
             <table class="table">
                 <thead>
                 <th>ISBN</th>
-                <th>Название</th>
+                <th style="width:30%">Название</th>
                 <th>Тираж</th>
                 <th>Дата печати</th>
                 </thead>
@@ -27,7 +27,7 @@
                     </td>
 
                     <td>
-                        <a th:text="${book.getTitle()}"/>
+                        <a class="break-table-cell" th:text="${book.getTitle()}"/>
                     </td>
 
                     <td th:text="${book.getCirculation()}"/>
