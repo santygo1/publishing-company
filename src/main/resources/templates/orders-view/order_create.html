@@ -26,6 +26,9 @@
                              th:if="${#fields.hasErrors('order.orderNumber')}">
                             <p th:each="error : ${#fields.errors('order.orderNumber')}" th:text="${error}"/>
                         </div>
+                        <div class="simple-error" th:if="${orderIdError != null}">
+                            <p th:text="${orderIdError}"/>
+                        </div>
 
                         <label for="createDate">Дата создания:</label>
                         <input id="createDate" type="date"

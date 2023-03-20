@@ -14,6 +14,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ru.danilspirin.publishingcompany.exceptions.BookServiceError;
+import ru.danilspirin.publishingcompany.exceptions.OrderNumberNonUniqueException;
 import ru.danilspirin.publishingcompany.models.Book;
 import ru.danilspirin.publishingcompany.models.Customer;
 import ru.danilspirin.publishingcompany.models.Order;
@@ -83,6 +84,7 @@ public class OrderController {
         loadCreateData(model);
         model.addAttribute("selectedCustomerId", selectedCustomerId);
         model.addAttribute("selectedBookId", selectedBookId);
+        model.addAttribute("orderIdError", null);
 
         Customer binding;
         if (!selectedCustomerId.equals("")){
@@ -94,7 +96,7 @@ public class OrderController {
                     .filter(fer -> !fer.getField().contains("customer"))
                     .toList();
 
-            bindingResult = new BeanPropertyBindingResult(orderCustomerRequest, "orderCustomerRequest");
+            bindingResult = new BeanPropertyBindingResult(orderCustomerRequest, "request");
 
             for (FieldError fieldError : errorsToKeep) {
                 bindingResult.addError(fieldError);
@@ -105,17 +107,25 @@ public class OrderController {
             if (bindingResult.hasErrors()){
                 return "orders-view/order_create";
             }
+
             binding = customerService.create(orderCustomerRequest.getCustomer());
         }
         // Делаем проверку всех вводимых полей
         if (bindingResult.hasErrors()){
+            log.info("Обьекты :{}" , bindingResult.getFieldErrors().stream().map(FieldError::toString).toList());
             return "orders-view/order_create";
         }
         Order order = orderCustomerRequest.getOrder();
         order.setCustomer(binding);
 
         order.setBook(bookService.getBook(selectedBookId));
-        Order created = orderService.addOrder(order);
+        Order created;
+        try{
+            created = orderService.addOrder(order);
+        }catch(OrderNumberNonUniqueException ex){
+            model.addAttribute("orderIdError", ex.getMessage());
+            return "orders-view/order_create";
+        }
         return "redirect:/orders/" + created.getId();
     }
 

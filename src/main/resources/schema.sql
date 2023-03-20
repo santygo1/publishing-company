@@ -67,5 +67,5 @@ CREATE TABLE IF NOT EXISTS orders(
     order_number VARCHAR(64) UNIQUE NOT NULL,
     create_date DATE NOT NULL,
     finish_date DATE NULL CONSTRAINT must_be_bigger_or_equals_then_create_date CHECK ( finish_date >= orders.create_date ),
-    books_count INTEGER NOT NULL CONSTRAINT CHECK ( books_count > 0 AND books_count <= 10000)
+    books_count INTEGER NOT NULL CHECK (books_count > 0 AND books_count <= 10000)
 );

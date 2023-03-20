@@ -23,7 +23,9 @@ public class OrderService {
     OrderRepository orderRepository;
 
     @Transactional
-    public Order addOrder(Order order){
+    public Order addOrder(Order order) throws
+            EntityWithIdIsNotExistsException,
+            OrderNumberNonUniqueException{
         orderRepository.findById(order.getId())
                         .ifPresent(orderDB -> {
                             throw new EntityWithIdIsNotExistsException(order.getId(), Order.class);
