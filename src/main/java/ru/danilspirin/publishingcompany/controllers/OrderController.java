@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.danilspirin.publishingcompany.exceptions.BookServiceError;
 import ru.danilspirin.publishingcompany.models.Book;
 import ru.danilspirin.publishingcompany.models.Customer;
 import ru.danilspirin.publishingcompany.models.Order;
@@ -39,20 +40,20 @@ public class OrderController {
     }
 
     @GetMapping("/create")
-    public String showCreateNewOrderWithRelatedCustomerForm(Model model){
+    public String showCreateNewOrderWithRelatedCustomerForm(Model model)
+            throws BookServiceError {
         Order order = new Order();
         order.setCustomer(new Customer());
         model.addAttribute("order", order);
 
         Set<Book> existedBooks = bookService.getAll();
+        if (existedBooks.isEmpty()){
+            throw new BookServiceError();
+        }
         model.addAttribute("books", existedBooks);
 
         Set<Customer> existedCustomers = customerService.getAll();
         model.addAttribute("customers", existedCustomers);
-
-        if (existedBooks.isEmpty()){
-            return "redirect:/book-service-error";
-        }
 
         return "orders-view/order_create";
     }

@@ -20,7 +20,7 @@ import java.util.UUID;
 public class Customer {
 
     @Id
-    final String id = UUID.randomUUID().toString();
+    String id = UUID.randomUUID().toString();
 
     @Size(max = 64, message = "Название компании должно быть короче 64 символов")
     @NotBlank(message = "Укажите название компании")
