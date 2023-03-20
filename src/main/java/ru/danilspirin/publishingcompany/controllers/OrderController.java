@@ -1,21 +1,32 @@
 package ru.danilspirin.publishingcompany.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ru.danilspirin.publishingcompany.exceptions.BookServiceError;
 import ru.danilspirin.publishingcompany.models.Book;
 import ru.danilspirin.publishingcompany.models.Customer;
 import ru.danilspirin.publishingcompany.models.Order;
+import ru.danilspirin.publishingcompany.requests.OrderCustomerRequest;
 import ru.danilspirin.publishingcompany.service.BookService;
 import ru.danilspirin.publishingcompany.service.CustomerService;
 import ru.danilspirin.publishingcompany.service.OrderService;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
@@ -39,13 +50,7 @@ public class OrderController {
         return "orders-view/order";
     }
 
-    @GetMapping("/create")
-    public String showCreateNewOrderWithRelatedCustomerForm(Model model)
-            throws BookServiceError {
-        Order order = new Order();
-        order.setCustomer(new Customer());
-        model.addAttribute("order", order);
-
+    private void loadCreateData(Model model) throws BookServiceError{
         Set<Book> existedBooks = bookService.getAll();
         if (existedBooks.isEmpty()){
             throw new BookServiceError();
@@ -54,29 +59,62 @@ public class OrderController {
 
         Set<Customer> existedCustomers = customerService.getAll();
         model.addAttribute("customers", existedCustomers);
+    }
+    @GetMapping("/create")
+    public String showCreateNewOrderWithRelatedCustomerForm(Model model)
+            throws BookServiceError {
+
+        OrderCustomerRequest orderCustomerRequest =
+                new OrderCustomerRequest(new Customer(), new Order());
+        model.addAttribute("request", orderCustomerRequest);
+
+        loadCreateData(model);
 
         return "orders-view/order_create";
     }
 
     @PostMapping()
     public String createNewOrderWithRelatedCustomerForm(
-            @ModelAttribute("order") Order order,
+            @ModelAttribute("request") @Valid OrderCustomerRequest orderCustomerRequest,BindingResult bindingResult,
             @RequestParam("selectedCustomerId") String selectedCustomerId,
-            @RequestParam("selectedBookId") String selectedBookId
+            @RequestParam("selectedBookId") String selectedBookId,
+            Model model
     ){
-        Customer customer;
+        loadCreateData(model);
+        model.addAttribute("selectedCustomerId", selectedCustomerId);
+        model.addAttribute("selectedBookId", selectedBookId);
+
+        Customer binding;
         if (!selectedCustomerId.equals("")){
             // Заказчик был выбран из списка заказчиков
-            customer = customerService.getCustomer(selectedCustomerId);
+            binding = customerService.getCustomer(selectedCustomerId);
+            orderCustomerRequest.setCustomer(new Customer()); // Очищаем поля ввода заказчика
+            // Удаляем все ошибки проверок наложенные на этот объект
+            List<FieldError> errorsToKeep = bindingResult.getFieldErrors().stream()
+                    .filter(fer -> !fer.getField().contains("customer"))
+                    .toList();
+
+            bindingResult = new BeanPropertyBindingResult(orderCustomerRequest, "orderCustomerRequest");
+
+            for (FieldError fieldError : errorsToKeep) {
+                bindingResult.addError(fieldError);
+            }
         }else {
             // Заказчик был создан
-            customer = customerService.create(order.getCustomer());
+            // Делаем проверку на поля ввода
+            if (bindingResult.hasErrors()){
+                return "orders-view/order_create";
+            }
+            binding = customerService.create(orderCustomerRequest.getCustomer());
         }
-        order.setCustomer(customer);
+        // Делаем проверку всех вводимых полей
+        if (bindingResult.hasErrors()){
+            return "orders-view/order_create";
+        }
+        Order order = orderCustomerRequest.getOrder();
+        order.setCustomer(binding);
 
-        //TODO: Обработка exeption
         order.setBook(bookService.getBook(selectedBookId));
-
         Order created = orderService.addOrder(order);
         return "redirect:/orders/" + created.getId();
     }
