@@ -43,6 +43,7 @@ input[type="submit"]:active,
 
 input[type="text"],
 input[type="date"],
+input[type="password"],
 input[type="number"]{
     outline: none;
     border: transparent;
@@ -55,13 +56,15 @@ input[type="number"]{
 }
 input[type="text"]:hover,
 input[type="date"]:hover,
-input[type="number"]:hover{
+input[type="number"]:hover,
+input[type="password"]:hover{
     border-bottom-color: black;
     color: black;
 }
 input[type="text"]:focus,
 input[type="date"]:focus,
-input[type="number"]:focus{
+input[type="number"]:focus,
+input[type="password"]:focus{
     color:black;
     border-bottom-color: #6c5ce7;
     border-radius: 5px;
@@ -396,7 +399,7 @@ header.navbar .navbar__button > .img-button:active{
     background-image: url("/icon/ic_book_gray.svg");
 }
 .welcome{
-    font-size: 48px;
+    font-size: 32px;
 }
 .main-menu{
     display: flex;
@@ -423,6 +426,7 @@ header.navbar .navbar__button > .img-button:active{
     background-color: #d6d7ff;
 }
 .main-menu .main-menu__item a{
+    color: black;
     text-decoration: none;
 }
 .main-menu .main-menu__item a:visited{
@@ -478,4 +482,25 @@ header.navbar .navbar__button > .img-button:active{
     gap: 10px;
     font-size: 14px;
     font-family: "Roboto Medium", sans-serif;
+}
+.welcome-block{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+.navbar__profile{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+.navbar__profile img{
+    width: 20px;
+    height: 20px;
+}
+.navbar__profile p{
+    font-size: 12px;
+}
+.navbar__profile form{
+    margin-left: 10px;
 }

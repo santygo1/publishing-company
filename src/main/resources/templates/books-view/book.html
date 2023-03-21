@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
   <meta charset="UTF-8">
   <title>Книга</title>
@@ -7,6 +7,27 @@
   <link rel="stylesheet" href="/orders.css" type="text/css">
 </head>
 <body>
+<header class="navbar">
+  <div class="navbar__button"><a th:href="@{/}" class="img-button"></a> </div>
+  <ul class="navbar-menu">
+    <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR', 'MANAGER')" class="navbar-menu__item"><a th:href="@{/books}">Книги</a></li>
+    <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR')" class="navbar-menu__item"><a th:href="@{/writers}">Писатели</a></li>
+    <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR')" class="navbar-menu__item"><a th:href="@{/contracts}">Контракты</a></li>
+    <li sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="navbar-menu__item"><a th:href="@{/customers}">Заказчики</a></li>
+    <li sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="navbar-menu__item"><a th:href="@{/orders}">Заказы</a></li>
+    <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR', 'MANAGER')" class="navbar-menu__item"><a th:href="@{/report}">Отчет</a></li>
+  </ul>
+  <div class="navbar__profile">
+    <img src="/icon/user.svg"/>
+    <p class="welcome" sec:authorize="hasRole('ADMIN')">Администратор</p>
+    <p class="welcome" sec:authorize="hasRole('MANAGER')">Менеджер отдела продаж</p>
+    <p class="welcome" sec:authorize="hasRole('EDITOR')">Ведущий редактор</p>
+    <form th:method="POST" th:action="@{/logout}">
+      <input type="submit" value="Выйти">
+    </form>
+  </div>
+</header>
+
 <form id="book-form" th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}" hidden></form>
 <main class="content" >
   <section class="info book__info">
@@ -38,13 +59,13 @@
       </div>
     </div>
 
-    <div class="info__buttons">
+    <div class="info__buttons" sec:authorize="hasAnyRole('ADMIN', 'EDITOR')">
       <a class="button" th:href="@{/books/{id}/edit(id=${book.getId()})}">Изменить</a>
       <input form="book-form" type="submit" value="Удалить">
     </div>
   </section>
 
-  <section class="info" th:with="orders=${book.getOrders()}">
+  <section class="info" th:with="orders=${book.getOrders()}" sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
     <h2 class="info__title">Заказы</h2>
     <hr>
 
@@ -78,7 +99,7 @@
     <a class="go-to-link" th:href="@{/orders}">Все</a>
   </section>
 
-  <section id="writers" class="info">
+  <section id="writers" class="info" sec:authorize="hasAnyRole('ADMIN', 'EDITOR')">
     <h2 class="info__title">Авторы</h2>
     <a class="go-to-link" th:href="@{/writers}">Все</a>
     <hr>

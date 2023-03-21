@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Издательский центр «Печать» | Главная</title>
@@ -9,26 +10,41 @@
     <header class="navbar">
         <div class="navbar__button"><a th:href="@{/}" class="img-button"></a> </div>
         <ul class="navbar-menu">
-            <li class="navbar-menu__item"><a th:href="@{/books}">Книги</a></li>
-            <li class="navbar-menu__item"><a th:href="@{/writers}">Писатели</a></li>
-            <li class="navbar-menu__item"><a th:href="@{/contracts}">Контракты</a></li>
-            <li class="navbar-menu__item"><a th:href="@{/customers}">Заказчики</a></li>
-            <li class="navbar-menu__item"><a th:href="@{/orders}">Заказы</a></li>
-            <li class="navbar-menu__item"><a th:href="@{/report}">Отчет</a></li>
+            <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR', 'MANAGER')" class="navbar-menu__item"><a th:href="@{/books}">Книги</a></li>
+            <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR')" class="navbar-menu__item"><a th:href="@{/writers}">Писатели</a></li>
+            <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR')" class="navbar-menu__item"><a th:href="@{/contracts}">Контракты</a></li>
+            <li sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="navbar-menu__item"><a th:href="@{/customers}">Заказчики</a></li>
+            <li sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="navbar-menu__item"><a th:href="@{/orders}">Заказы</a></li>
+            <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR', 'MANAGER')" class="navbar-menu__item"><a th:href="@{/report}">Отчет</a></li>
         </ul>
-        <a class="navbar__profile" >Войти</a>
+        <div class="navbar__profile">
+            <img src="/icon/user.svg"/>
+            <p class="welcome" sec:authorize="hasRole('ADMIN')">Администратор</p>
+            <p class="welcome" sec:authorize="hasRole('MANAGER')">Менеджер отдела продаж</p>
+            <p class="welcome" sec:authorize="hasRole('EDITOR')">Ведущий редактор</p>
+            <form th:method="POST" th:action="@{/logout}">
+                <input type="submit" value="Выйти">
+            </form>
+        </div>
     </header>
 
     <main class="content">
         <section class="main-section">
-            <h1 class="welcome">Добро пожаловать</h1>
+            <div class="welcome-block">
+                <h1 class="welcome">Добро пожаловать,</h1>
+                <h1 class="welcome" sec:authorize="hasRole('ADMIN')">администратор</h1>
+                <h1 class="welcome" sec:authorize="hasRole('MANAGER')">менеджер отдела продаж</h1>
+                <h1 class="welcome" sec:authorize="hasRole('EDITOR')">ведущий редактор</h1>
+                <h1 class="welcome" sec:authentication="name"></h1>
+            </div>
+
             <ul class="main-menu">
-                <li class="main-menu__item"><img src="/icon/books.svg" alt="books"/><a th:href="@{/books}">Книги</a></li>
-                <li class="main-menu__item"><img src="/icon/writer.png" alt="writers"/><a th:href="@{/writers}">Писатели</a></li>
-                <li class="main-menu__item"><img src="/icon/contract.svg" alt="contracts"/><a th:href="@{/contracts}">Контракты</a></li>
-                <li class="main-menu__item"><img src="/icon/customers.png" alt="customers"/><a th:href="@{/customers}">Заказчики</a></li>
-                <li class="main-menu__item"><img src="/icon/orders.svg" alt="orders"/><a th:href="@{/orders}">Заказы</a></li>
-                <li class="main-menu__item"><img src="/icon/report.svg" alt="orders"/><a th:href="@{/report}">Отчет</a></li>
+                <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR', 'MANAGER')" class="main-menu__item"><img src="/icon/books.svg" alt="books"/><a th:href="@{/books}">Книги</a></li>
+                <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR')" class="main-menu__item"><img src="/icon/writer.png" alt="writers"/><a th:href="@{/writers}">Писатели</a></li>
+                <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR')" class="main-menu__item"><img src="/icon/contract.svg" alt="contracts"/><a th:href="@{/contracts}">Контракты</a></li>
+                <li sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="main-menu__item"><img src="/icon/customers.png" alt="customers"/><a th:href="@{/customers}">Заказчики</a></li>
+                <li sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="main-menu__item"><img src="/icon/orders.svg" alt="orders"/><a th:href="@{/orders}">Заказы</a></li>
+                <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR', 'MANAGER')" class="main-menu__item"><img src="/icon/report.svg" alt="orders"/><a th:href="@{/report}">Отчет</a></li>
             </ul>
         </section>
     </main>

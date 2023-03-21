@@ -25,3 +25,9 @@ VALUES ('customer-id-1', 'company', 'company_address', 'phone_number', 'surname'
 INSERT INTO orders(id, book_id, customer_id, order_number, create_date, finish_date, books_count)
 VALUES
     ('order-id-1', 'book-id-222', 'customer-id-1', '№123', '2002-02-20','2002-02-21',70);
+
+INSERT INTO users (login, role, password)
+VALUES
+    ('admin','ROLE_ADMIN','$2a$12$Je/8mY9KQXez0sea6jg9Z.fdV33JZKfMUW7Ey9DSMFFvvffdvcFdu'),
+    ('manager','ROLE_MANAGER','$2a$12$ocosllfHZYJia34q1ml3v.JY83pTKZhx3ae3IFClVdBhxr3z5IsIW'),
+    ('editor','ROLE_EDITOR', '$2a$12$e.jQ.SxVZglUTxYePLtssuHTi2KgILdI4xw8jNci2LH3C5SBcwV.G');

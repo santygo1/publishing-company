@@ -1,11 +1,32 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Писатель</title>
     <link rel="stylesheet" href="/styles.css" type="text/css">
 </head>
 <body>
+<header class="navbar">
+    <div class="navbar__button"><a th:href="@{/}" class="img-button"></a> </div>
+    <ul class="navbar-menu">
+        <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR', 'MANAGER')" class="navbar-menu__item"><a th:href="@{/books}">Книги</a></li>
+        <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR')" class="navbar-menu__item"><a th:href="@{/writers}">Писатели</a></li>
+        <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR')" class="navbar-menu__item"><a th:href="@{/contracts}">Контракты</a></li>
+        <li sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="navbar-menu__item"><a th:href="@{/customers}">Заказчики</a></li>
+        <li sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="navbar-menu__item"><a th:href="@{/orders}">Заказы</a></li>
+        <li sec:authorize="hasAnyRole('ADMIN', 'EDITOR', 'MANAGER')" class="navbar-menu__item"><a th:href="@{/report}">Отчет</a></li>
+    </ul>
+    <div class="navbar__profile">
+        <img src="/icon/user.svg"/>
+        <p class="welcome" sec:authorize="hasRole('ADMIN')">Администратор</p>
+        <p class="welcome" sec:authorize="hasRole('MANAGER')">Менеджер отдела продаж</p>
+        <p class="welcome" sec:authorize="hasRole('EDITOR')">Ведущий редактор</p>
+        <form th:method="POST" th:action="@{/logout}">
+            <input type="submit" value="Выйти">
+        </form>
+    </div>
+</header>
+
     <form id="contract-form" th:method="DELETE" th:action="@{/writers/{id}(id=${writer.getId()})}" hidden></form>
 
     <main class="content" >

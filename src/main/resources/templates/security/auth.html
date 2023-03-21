@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Вход</title>
+  <link rel="stylesheet" href="/styles.css" type="text/css">
+  <link rel="stylesheet" href="/auth.css" type="text/css">
+</head>
+<body>
+<div class="auth">
+  <form th:method="POST" th:action="@{/auth}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+    <div class="logo"><img src="/icon/ic_book.svg"/><h1>Печать</h1></div>
+
+    <div class="forms">
+      <input id="username" name="username" type="text" class="auth__text-form" placeholder="Логин"/>
+      <input id="password" name="password" type="password" class="auth__text-form" placeholder="Пароль">
+    </div>
+
+    <div class="error" th:if="${param.error}" style="color:red">
+      Неправильный логин или пароль
+    </div>
+
+    <input class="auth__button" type="submit" value="Войти">
+  </form>
+</div>
+</body>
+</html>
