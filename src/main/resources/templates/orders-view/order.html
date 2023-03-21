@@ -24,7 +24,7 @@
 
                 <p class="hint">Дата выполнения</p>
                 <p th:if="${order.getFinishDate()!=null}" th:text="${#temporals.format(order.getFinishDate(), 'dd.MM.yyyy')}"/>
-                <p th:if="${order.getFinishDate() == null}" class="text-red">Не закончен</p>
+                <p th:if="${order.getFinishDate() == null}" class="text-red">Не окончен</p>
             </div>
         </div>
 
@@ -64,7 +64,7 @@
         </div>
         <div class="info__field">
             <div class="properties">
-                <p class="hint">Название</p><p th:text="${customer.getCompany()}"></p>
+                <p class="hint">Компания</p><p th:text="${customer.getCompany()}"></p>
                 <p class="hint">Представитель</p><p th:text="${customer.getOwnerFullName().initials()}"></p>
                 <p class="hint">Адрес</p><p class="properties__field" th:text="${customer.getAddress()}"></p>
                 <p class="hint">Телефон</p><p th:text="${customer.getPhoneNumber()}"></p>

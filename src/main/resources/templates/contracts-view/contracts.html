@@ -6,21 +6,32 @@
     <link rel="stylesheet" href="/styles.css" type="text/css">
 </head>
 <body>
+<header class="navbar">
+    <div class="navbar__button"><a th:href="@{/}" class="img-button"></a> </div>
+    <ul class="navbar-menu">
+        <li class="navbar-menu__item"><a th:href="@{/books}">Книги</a></li>
+        <li class="navbar-menu__item"><a th:href="@{/writers}">Писатели</a></li>
+        <li class="navbar-menu__item"><a class="active" th:href="@{/contracts}">Контракты</a></li>
+        <li class="navbar-menu__item"><a th:href="@{/customers}">Заказчики</a></li>
+        <li class="navbar-menu__item"><a th:href="@{/orders}">Заказы</a></li>
+    </ul>
+    <a class="navbar__profile" >Войти</a>
+</header>
     <main class="content">
         <div class="table-wrapper">
             <table class="table">
                 <thead>
-                <th>Номер контракта</th>
+                <th style="width: 25%">Номер контракта</th>
                 <th>Дата создания</th>
                 <th>Длительность контракта</br>(в годах)</th>
                 <th>Дата расторжения</th>
                 <th>Расторгнут</th>
-                <th>Писатель</th>
+                <th style="width: 25%;">Писатель</th>
                 </thead>
                 <tbody>
                 <tr th:each="contract : ${contracts}">
                     <td>
-                        <a th:text="${contract.getContractNumber()}"
+                        <a class="break-table-cell" th:text="${contract.getContractNumber()}"
                            th:href="@{/contracts/{id}(id=${contract.getId()})}"></a>
                     </td>
                     <td th:text="${#temporals.format(contract.getCreateDate(), 'dd.MM.yyyy')}"></td>
@@ -31,7 +42,7 @@
                         th:unless="${contract.isFinished()}" class="text-green">Нет</td>
 
                     <td th:with="writer=${contract.getWriter()}">
-                        <a th:if="${writer != null}"
+                        <a class="break-table-cell" th:if="${writer != null}"
                            th:text="${writer.getFullName().initials()}"
                            th:href="@{/writers/{id}(id=${writer.getId()})}">
                         </a>

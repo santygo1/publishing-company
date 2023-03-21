@@ -6,6 +6,17 @@
     <link rel="stylesheet" href="/styles.css" type="text/css">
 </head>
 <body>
+<header class="navbar">
+    <div class="navbar__button"><a th:href="@{/}" class="img-button"></a> </div>
+    <ul class="navbar-menu">
+        <li class="navbar-menu__item"><a th:href="@{/books}">Книги</a></li>
+        <li class="navbar-menu__item"><a th:href="@{/writers}">Писатели</a></li>
+        <li class="navbar-menu__item"><a th:href="@{/contracts}">Контракты</a></li>
+        <li class="navbar-menu__item"><a th:href="@{/customers}">Заказчики</a></li>
+        <li class="navbar-menu__item"><a class="active" th:href="@{/orders}">Заказы</a></li>
+    </ul>
+    <a class="navbar__profile" >Войти</a>
+</header>
 <main class="content">
     <div class="orders-table">
         <div class="table-wrapper">
@@ -29,7 +40,8 @@
                     </td>
 
                     <td th:text="${#temporals.format(order.getCreateDate(), 'dd.MM.yyyy')}"/>
-                    <td th:text="${#temporals.format(order.getFinishDate(), 'dd.MM.yyyy')}"/>
+                    <td th:if="${order.getFinishDate()!= null}" th:text="${#temporals.format(order.getFinishDate(), 'dd.MM.yyyy')}"/>
+                    <td th:if="${order.getFinishDate() == null}" th:text="'Не окончен'" class="text-red"/>
 
                     <td th:text="${order.getBooksCount()}"/>
 

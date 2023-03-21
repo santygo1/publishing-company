@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчет</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+</head>
+<body>
+<main class="content">
+    <section class="report-utils">
+        <form class="report-form" th:method="GET" th:action="@{/report}">
+            <label for="createDate" >Дата от:</label>
+            <input id="createDate"
+                   name="createDate"
+                   type="date"
+                   th:value="${dateFrom != null} ? ${dateFrom}"
+                   oninput="setMinFinishDate()"/>
+
+            <label for="finishDate">Дата до:</label>
+            <input id="finishDate"
+                   name="finishDate"
+                   th:value="${dateTo != null} ? ${dateTo}"
+                   type="date"/>
+            <input class="button" type="submit" value = "Составить">
+        </form>
+    </section>
+    <section class="report" th:if="${dateFrom != null && dateTo != null}">
+        <div class="absolute-profit">
+            <p>Итого:</p>
+            <p th:text="${absoluteProfit} + ' руб.'"></p>
+        </div>
+        <hr>
+        <p class="empty-hint" th:if="${customersProfitReport.isEmpty()}">Выполненные заказы за указанный период отсутствуют.</p>
+        <div class="customer-report" th:each="report : ${customersProfitReport}">
+            <h3 class="properties__field customer-report__customer-name" th:text="'Заказчик: ' + ${report.getCustomer().getCompany()}"></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>Название книги</th>
+                    <th style="width:15%">Себестоимость, руб.</th>
+                    <th style="width: 12%">Цена продажи, руб</th>
+                    <th style="width: 10%;">Количество экземпляров</th>
+                    <th>Прибыль от продажи книг, руб</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="book : ${report.getBooksWithProfit().keySet()}"
+                    th:with="absoluteBookRecord = ${report.getBooksWithProfit().get(book)}">
+                    <td class="break-table-cell" th:text="'«' + ${book.getTitle()} + '»'"/>
+                    <td th:text="${book.getCostPrice()}"/>
+                    <td th:text="${book.getSellingPrice()}"/>
+                    <td th:text="${absoluteBookRecord.getAbsoluteBooksCount()}"/>
+                    <td th:text="${absoluteBookRecord.getAbsoluteBooksProfit()}"/>
+                </tr>
+                </tbody>
+            </table>
+            <div class="customer-report-result">
+                <p>Итого получено от заказчика:</p>
+                <p th:text="${report.calculateAbsoluteProfit()} + ' руб.'"></p>
+            </div>
+        </div>
+    </section>
+</main>
+<script src="/js/script.js"></script>
+</body>
+</html>
